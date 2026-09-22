@@ -663,17 +663,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
            let icon = NSImage(contentsOf:url) {
             NSApp.applicationIconImage = icon
         }
-        NSApp.servicesProvider = self
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-        Task { @MainActor in
-            CompressorModel.shared.handleIncoming(urls)
-        }
-    }
-
-    @objc func compressFilesService(_ pboard: NSPasteboard, userData: String, error: AutoreleasingUnsafeMutablePointer<NSString>) {
-        guard let urls = pboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL], !urls.isEmpty else { return }
         Task { @MainActor in
             CompressorModel.shared.handleIncoming(urls)
         }

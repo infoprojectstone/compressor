@@ -45,5 +45,8 @@ if [ -d "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" ];
   cp -R "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" "$BUILD_DIR/Comprimir con Compresor.workflow"
 fi
 
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$APP_DIR" 2>/dev/null || true
+/System/Library/CoreServices/pbs -flush 2>/dev/null || true
+
 echo "Aplicación creada en: $APP_DIR"
 echo "Zip empaquetado en: $BUILD_DIR/Compressor-1.2.zip"
