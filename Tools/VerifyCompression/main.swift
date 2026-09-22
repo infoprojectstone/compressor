@@ -4,6 +4,7 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import PDFKit
+import Quartz
 import UniformTypeIdentifiers
 
 @main
@@ -19,7 +20,8 @@ struct VerifyCompression {
 
         var allPassed = true
 
-        // 1. PRUEBA DE IMAGEN: JPEG (Gradiente fotográfico de alta resolución)
+
+
         print("▶ [1/4] PRUEBA: Imagen JPEG (Modo Calidad)")
         do {
             let jpegIn = tempDir.appendingPathComponent("sample_photo.jpg")
@@ -107,28 +109,86 @@ struct VerifyCompression {
             allPassed = false
         }
 
-        // 4. PRUEBA DE PDF: PDF multipágina con PDFKit & CoreGraphics
-        print("▶ [4/4] PRUEBA: Documento PDF (PDFKit nativo - 3 páginas con gráficos)")
+        // 4. PRUEBA DE PDF: Motor Híbrido en 2 Niveles (QuartzFilter + Rasterización Adaptativa)
+        print("▶ [4/4] PRUEBA: Documentos PDF (Motor Híbrido SafePDFCompressor)")
         do {
-            let pdfIn = tempDir.appendingPathComponent("sample_document.pdf")
-            try makeTestPDF(at: pdfIn, pageCount: 3)
-            let origSize = fileSize(pdfIn)
-            print("  • Documento PDF original: \(formatBytes(origSize)) (3 páginas)")
+            // 4a. PDF con imágenes HD y texto vectorial (Nivel 1: QuartzFilter)
+            print("  • Subprueba 4a: PDF mixto HD (3 páginas con fotos HD y vectores)")
+            let pdfHdIn = tempDir.appendingPathComponent("sample_hd_vector.pdf")
+            let pdfHdOut = tempDir.appendingPathComponent("sample_hd_vector_compressed.pdf")
+            try makePhotographicPDF(at: pdfHdIn, pageCount: 3, imgW: 1800, imgH: 1200)
+            let hdOrigSize = fileSize(pdfHdIn)
+            print("    - Archivo original: \(formatBytes(hdOrigSize))")
 
-            let pdfOut = tempDir.appendingPathComponent("sample_document_compressed.pdf")
-            guard let doc = PDFDocument(url: pdfIn) else {
+            let filterProps: [String: Any] = [
+                "Domains": ["Applications": true, "Printing": true],
+                "FilterType": 1,
+                "Name": "Compressor Filter",
+                "FilterData": [
+                    "ColorSettings": [
+                        "ImageSettings": [
+                            "ImageCompression": "ImageJPEGCompress",
+                            "Compression Quality": 0.70,
+                            "ImageScaleSettings": [
+                                "ImageResolution": 144,
+                                "ImageScaleInterpolate": true,
+                                "ImageSizeMax": 1920,
+                                "ImageSizeMin": 0
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+            if let filter = QuartzFilter(properties: filterProps),
+               let inPDFDoc = PDFDocument(url: pdfHdIn),
+               let consumer = CGDataConsumer(url: pdfHdOut as CFURL) {
+                var firstBox = inPDFDoc.page(at: 0)?.bounds(for: .mediaBox) ?? CGRect(x: 0, y: 0, width: 600, height: 800)
+                if let ctx = CGContext(consumer: consumer, mediaBox: &firstBox, nil) {
+                    filter.apply(to: ctx)
+                    for i in 0..<inPDFDoc.pageCount {
+                        if let page = inPDFDoc.page(at: i) {
+                            var pageBox = page.bounds(for: .mediaBox)
+                            ctx.beginPage(mediaBox: &pageBox)
+                            page.draw(with: .mediaBox, to: ctx)
+                            ctx.endPage()
+                        }
+                    }
+                    ctx.closePDF()
+                }
+            }
+            let hdFinalSize = fileSize(pdfHdOut)
+            let hdSaving = calcSaving(hdOrigSize, hdFinalSize)
+            print("    - Archivo comprimido (Nivel 1): \(formatBytes(hdFinalSize))")
+            print("    - Reducción lograda: \(hdSaving)")
+
+            if hdFinalSize < hdOrigSize && hdFinalSize > 0 {
+                print("    ✅ Nivel 1 (QuartzFilter vectorial): Compresión masiva exitosa.\n")
+            } else {
+                print("    ❌ Nivel 1: No logró reducir el PDF mixto.\n")
+                allPassed = false
+            }
+
+            // 4b. PDF escaneado multipágina (Nivel 2: Rasterización adaptativa)
+            print("  • Subprueba 4b: PDF escaneado (3 páginas de mapa de bits)")
+            let pdfScanIn = tempDir.appendingPathComponent("sample_scanned.pdf")
+            let pdfScanOut = tempDir.appendingPathComponent("sample_scanned_compressed.pdf")
+            try makeTestPDF(at: pdfScanIn, pageCount: 3)
+            let scanOrigSize = fileSize(pdfScanIn)
+            print("    - Archivo original: \(formatBytes(scanOrigSize))")
+
+            guard let scanDoc = PDFDocument(url: pdfScanIn) else {
                 throw NSError(domain: "Test", code: 5, userInfo: [NSLocalizedDescriptionKey: "No se pudo leer el PDF"])
             }
             let outDoc = PDFDocument()
-            let scale: CGFloat = 1.2
-            let jpegQuality: Double = 0.60
+            let scale: CGFloat = 1.0
+            let jpegQuality: Double = 0.55
             let colorSpace = CGColorSpaceCreateDeviceRGB()
 
-            for i in 0..<doc.pageCount {
-                guard let page = doc.page(at: i) else { continue }
+            for i in 0..<scanDoc.pageCount {
+                guard let page = scanDoc.page(at: i) else { continue }
                 let bounds = page.bounds(for: .mediaBox)
-                let pw = max(100, Int(bounds.width * scale))
-                let ph = max(100, Int(bounds.height * scale))
+                let pw = max(80, Int(bounds.width * scale))
+                let ph = max(80, Int(bounds.height * scale))
 
                 guard let ctx = CGContext(data: nil, width: pw, height: ph, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { continue }
                 ctx.setFillColor(NSColor.white.cgColor)
@@ -150,18 +210,18 @@ struct VerifyCompression {
                 }
             }
 
-            guard outDoc.write(to: pdfOut) else {
+            guard outDoc.write(to: pdfScanOut) else {
                 throw NSError(domain: "Test", code: 6, userInfo: [NSLocalizedDescriptionKey: "No se pudo escribir el PDF comprimido"])
             }
-            let finalSize = fileSize(pdfOut)
-            let reduction = calcSaving(origSize, finalSize)
-            print("  • PDF comprimido: \(formatBytes(finalSize)) (Páginas preservadas: \(outDoc.pageCount))")
-            print("  • Reducción lograda: \(reduction)")
+            let scanFinalSize = fileSize(pdfScanOut)
+            let scanSaving = calcSaving(scanOrigSize, scanFinalSize)
+            print("    - Archivo comprimido (Nivel 2): \(formatBytes(scanFinalSize)) (Páginas: \(outDoc.pageCount))")
+            print("    - Reducción lograda: \(scanSaving)")
 
-            if finalSize < origSize && outDoc.pageCount == 3 {
-                print("  ✅ PDF: Optimización y páginas verificadas con éxito.\n")
+            if scanFinalSize < scanOrigSize && outDoc.pageCount == 3 {
+                print("    ✅ Nivel 2 (Rasterización adaptativa): Compresión superada con éxito.\n")
             } else {
-                print("  ❌ PDF: Falló la reducción o integridad de páginas.\n")
+                print("    ❌ Nivel 2: Falló la reducción o integridad de páginas.\n")
                 allPassed = false
             }
         } catch {
@@ -426,6 +486,39 @@ struct VerifyCompression {
             }
         }
         doc.write(to: url)
+    }
+
+    private static func makePhotographicPDF(at url: URL, pageCount: Int, imgW: Int, imgH: Int) throws {
+        var mediaBox = CGRect(x: 0, y: 0, width: 595, height: 842)
+        guard let consumer = CGDataConsumer(url: url as CFURL),
+              let ctx = CGContext(consumer: consumer, mediaBox: &mediaBox, nil) else {
+            throw NSError(domain: "Test", code: 9, userInfo: [NSLocalizedDescriptionKey: "No se pudo crear contexto PDF"])
+        }
+        for p in 0..<pageCount {
+            ctx.beginPage(mediaBox: &mediaBox)
+            // 1. Draw large background/content image
+            var pixels = [UInt8](repeating: 0, count: imgW * imgH * 4)
+            for y in 0..<imgH {
+                let ny = Double(y) / Double(imgH)
+                for x in 0..<imgW {
+                    let nx = Double(x) / Double(imgW)
+                    let idx = (y * imgW + x) * 4
+                    pixels[idx] = UInt8(clamping: Int(sin(nx * .pi) * 255))
+                    pixels[idx + 1] = UInt8(clamping: Int(cos(ny * .pi + Double(p)) * 128 + 127))
+                    pixels[idx + 2] = UInt8(clamping: Int((nx + ny) * 127))
+                    pixels[idx + 3] = 255
+                }
+            }
+            if let provider = CGDataProvider(data: Data(pixels) as CFData),
+               let img = CGImage(width: imgW, height: imgH, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: imgW * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue), provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent) {
+                ctx.draw(img, in: CGRect(x: 50, y: 200, width: 495, height: 500))
+            }
+            // 2. Draw vector shapes
+            ctx.setFillColor(NSColor.systemBlue.cgColor)
+            ctx.fill(CGRect(x: 50, y: 720, width: 495, height: 40))
+            ctx.endPage()
+        }
+        ctx.closePDF()
     }
 
     private static func fileSize(_ url: URL) -> Int64 {

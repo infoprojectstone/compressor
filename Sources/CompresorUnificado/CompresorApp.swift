@@ -4,6 +4,7 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import PDFKit
+import Quartz
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -559,101 +560,8 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         return out
     }
     nonisolated private static func compressPDF(_ url: URL, config: CompressionConfig, control: CompressionControl) throws -> URL {
-        guard let doc = PDFDocument(url: url) else {
-            throw NSError(domain:"Compressor", code:1, userInfo:[NSLocalizedDescriptionKey:tr("No se pudo abrir el documento PDF.", "Could not open the PDF document.")])
-        }
-        let pageCount = doc.pageCount
-        guard pageCount > 0 else { return url }
-
-        let folder = try outputDirectory(for:url, config:config)
-        let out = unique(url, directory:folder, suffix:"_comprimido", ext:"pdf")
-
-        let scale: CGFloat
-        let jpegQuality: Double
-
-        if config.mode == .quality {
-            switch config.quality {
-            case .high:
-                scale = 2.0
-                jpegQuality = 0.85
-            case .balanced:
-                scale = 1.6
-                jpegQuality = 0.74
-            case .small:
-                scale = 1.0
-                jpegQuality = 0.50
-            }
-        } else {
-            let targetTotalBytes = Int64(config.targetSizeMB * 1_000_000)
-            let targetPerPage = targetTotalBytes / Int64(pageCount)
-            if targetPerPage >= 250_000 {
-                scale = 1.8
-                jpegQuality = 0.78
-            } else if targetPerPage >= 120_000 {
-                scale = 1.4
-                jpegQuality = 0.62
-            } else if targetPerPage >= 60_000 {
-                scale = 1.0
-                jpegQuality = 0.48
-            } else {
-                scale = 0.8
-                jpegQuality = 0.38
-            }
-        }
-
-        let outputDoc = PDFDocument()
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-
-        for index in 0..<pageCount {
-            control.waitIfPaused()
-            guard let page = doc.page(at: index) else { continue }
-            let bounds = page.bounds(for: .mediaBox)
-            let pixelWidth = max(100, Int(bounds.width * scale))
-            let pixelHeight = max(100, Int(bounds.height * scale))
-
-            autoreleasepool {
-                guard let cgContext = CGContext(
-                    data: nil,
-                    width: pixelWidth,
-                    height: pixelHeight,
-                    bitsPerComponent: 8,
-                    bytesPerRow: 0,
-                    space: colorSpace,
-                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
-                ) else { return }
-
-                cgContext.setFillColor(NSColor.white.cgColor)
-                cgContext.fill(CGRect(x: 0, y: 0, width: pixelWidth, height: pixelHeight))
-
-                cgContext.saveGState()
-                cgContext.scaleBy(x: scale, y: scale)
-                page.draw(with: .mediaBox, to: cgContext)
-                cgContext.restoreGState()
-
-                guard let cgImage = cgContext.makeImage() else { return }
-
-                let jpegData = NSMutableData()
-                guard let destination = CGImageDestinationCreateWithData(jpegData, UTType.jpeg.identifier as CFString, 1, nil) else { return }
-                let options: [CFString: Any] = [kCGImageDestinationLossyCompressionQuality: jpegQuality]
-                CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
-                guard CGImageDestinationFinalize(destination) else { return }
-
-                guard let compressedImage = NSImage(data: jpegData as Data),
-                      let newPage = PDFPage(image: compressedImage) else { return }
-                newPage.setBounds(bounds, for: .mediaBox)
-                outputDoc.insert(newPage, at: outputDoc.pageCount)
-            }
-        }
-
-        guard outputDoc.pageCount > 0 else {
-            throw NSError(domain:"Compressor", code:2, userInfo:[NSLocalizedDescriptionKey:tr("No se pudieron procesar las páginas del PDF.", "Could not process the PDF pages.")])
-        }
-
-        guard outputDoc.write(to: out) else {
-            throw NSError(domain:"Compressor", code:3, userInfo:[NSLocalizedDescriptionKey:tr("No se pudo guardar el archivo PDF.", "Could not save the PDF file.")])
-        }
-
-        return out
+        let folder = try outputDirectory(for: url, config: config)
+        return try SafePDFCompressor.compress(url, config: config, destinationFolder: folder, uniqueNamer: unique, control: control)
     }
 }
 
