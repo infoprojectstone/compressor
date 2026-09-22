@@ -1,0 +1,20 @@
+# Compilación y artefactos
+.build/
+build/
+DerivedData/
+.swiftpm/
+*.xcodeproj
+*.xcworkspace
+
+# Archivos de sistema macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Carpetas de salida de compresión generadas al probar
+Comprimidos/
+**/Comprimidos/
+*.tmp
