@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compressor para macOS — Compresor gratuito de imágenes, vídeo y PDF</title>
+  <meta name="description" content="Comprime imágenes, vídeos y PDFs en tu Mac de forma 100% nativa, rápida y privada. Sin límites, sin suscripciones y sin enviar tus archivos a servidores externos.">
+  <link rel="icon" type="image/png" href="app-icon.png">
+  <style>
+    :root {
+      --bg: #0d0f12;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #0A84FF;
+      --accent-hover: #0071e3;
+      --text: #f5f5f7;
+      --text-muted: #86868b;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .background-glow {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.18) 0%, rgba(10, 132, 255, 0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header / Nav */
+    header {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 1.15rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-container img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 70px 0 50px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 132, 255, 0.15);
+      border: 1px solid rgba(10, 132, 255, 0.3);
+      color: #5ac8fa;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 24px;
+      display: block;
+      border-radius: 28px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero h1 {
+      font-size: 3.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, #ffffff 40%, #a1a1a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 36px;
+    }
+
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(10, 132, 255, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(10, 132, 255, 0.5);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-weight: 500;
+      font-size: 1.05rem;
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .meta-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 14px;
+    }
+
+    /* Grid Features */
+    .features {
+      padding: 60px 0 80px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      backdrop-filter: blur(20px);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* How to Install */
+    .install-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin: 40px 0 80px;
+    }
+
+    .install-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .step h4 {
+      font-size: 1.05rem;
+      margin-top: 4px;
+    }
+
+    .step p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .gatekeeper-callout {
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: rgba(255, 159, 10, 0.1);
+      border: 1px solid rgba(255, 159, 10, 0.25);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      color: #ffd60a;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.4rem; }
+      .hero p { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-glow"></div>
+
+  <div class="container">
+    <header>
+      <a href="#" class="logo-container">
+        <img src="app-icon.png" alt="Compressor Logo">
+        <span>Compressor</span>
+      </a>
+      <a href="https://github.com/infoprojectstone/compressor" target="_blank" class="nav-link">GitHub ↗</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-badge">Gratuito & Open Source • macOS 13+</div>
+        <img src="app-icon.png" alt="Icono de Compressor" class="hero-icon">
+        <h1>Comprime todo en tu Mac.<br>Sin perder calidad.</h1>
+        <p>Una aplicación nativa para reducir el tamaño de imágenes, vídeos y documentos PDF a toda velocidad. 100% local y privado.</p>
+        
+        <div class="cta-group">
+          <a href="https://github.com/infoprojectstone/compressor/releases/latest/download/Compressor-1.2.dmg" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Descargar para macOS (.dmg)
+          </a>
+          <a href="https://github.com/infoprojectstone/compressor" target="_blank" class="btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Ver código en GitHub
+          </a>
+        </div>
+        <div class="meta-note">Versión 1.2 • Universal (Apple Silicon M1/M2/M3/M4 & Intel) • 2.3 MB</div>
+      </section>
+
+      <section class="features">
+        <h2 class="section-title">Diseñado para ser rápido y eficiente</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h3>Compresión de Imágenes</h3>
+            <p>Compatible con JPG, PNG y WebP. Reduce hasta un 80% el peso manteniendo una nitidez impecable o ajusta un tamaño objetivo en MB.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎬</div>
+            <h3>Vídeo Acelerado por Hardware</h3>
+            <p>Aprovecha el motor multimedia de tu Mac con Apple VideoToolbox para transcodificar clips MP4 y MOV a máxima velocidad.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📄</div>
+            <h3>Documentos PDF</h3>
+            <p>Reduce el peso de facturas, escaneos y presentaciones PDF mediante PDFKit nativo conservando la lectura y las páginas.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>100% Privado y Offline</h3>
+            <p>Tus datos son tuyos. Todo el procesamiento se realiza en local en tu dispositivo, sin enviar nada a servidores externos ni necesitar internet.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⏱️</div>
+            <h3>Temporizador con Pausa</h3>
+            <p>Sigue el progreso en tiempo real con opción de pausar y reanudar la compresión en cualquier momento sin perder la cuenta.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Nunca Sobrescribe Originales</h3>
+            <p>Crea copias optimizadas en una subcarpeta dedicada con nombres únicos, manteniendo tus archivos originales siempre intactos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="install-box">
+        <h2 style="font-size: 1.6rem; margin-bottom: 8px;">Cómo instalar en tu Mac</h2>
+        <p style="color: var(--text-muted);">Sigue estos sencillos pasos para empezar a usar Compressor:</p>
+
+        <div class="install-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h4>Descarga el .dmg</h4>
+            <p>Bájate el archivo desde el botón superior o desde Releases en GitHub.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h4>Arrastra a Aplicaciones</h4>
+            <p>Abre el archivo descargado y mueve el icono de Compressor a la carpeta Aplicaciones.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h4>¡Listo para usar!</h4>
+            <p>Ábrelo y arrastra cualquier imagen, vídeo o PDF para comprimirlo al instante.</p>
+          </div>
+        </div>
+
+        <div class="gatekeeper-callout">
+          <strong>💡 Aviso para la primera apertura en macOS:</strong><br>
+          Al ser una herramienta gratuita e independiente sin certificado de pago anual de Apple, si macOS muestra el aviso <em>"no se puede abrir porque el desarrollador no ha sido verificado"</em>: haz <strong>clic derecho sobre Compressor en Aplicaciones > Abrir</strong> (o pulsa <em>"Abrir igualmente"</em> en Ajustes del Sistema > Privacidad y seguridad). Solo se hace una vez.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Compressor es software libre creado con ❤️ para macOS • <a href="https://github.com/infoprojectstone/compressor">Código fuente en GitHub</a></p>
+    </footer>
+  </div>
+</body>
+</html>
