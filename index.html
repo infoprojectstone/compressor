@@ -131,10 +131,44 @@
       font-size: 0.9rem !important;
       transition: all 0.2s ease !important;
     }
-    .nav-cta:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: #f3f4f6;
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+    .mobile-toggle.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .mobile-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .mobile-toggle.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+    .scroll-hint {
+      display: none;
     }
 
     /* Container */
@@ -648,11 +682,235 @@
     footer a:hover {
       color: #fff;
     }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 16px;
+    /* Mobile & Tablet Responsive Optimizations */
+    @media (max-width: 860px) {
+      .finder-section {
+        grid-template-columns: 1fr;
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-toggle {
+        display: flex;
+      }
+      .nav-links {
+        position: fixed;
+        top: 69px;
+        left: 0;
+        right: 0;
+        background: rgba(14, 16, 23, 0.98);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 24px;
+        gap: 8px;
+        transform: translateY(-130%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 99;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+      }
+      .nav-links.open {
+        transform: translateY(0);
+      }
+      .nav-links a {
+        font-size: 1.05rem;
+        display: block;
+        padding: 12px 0;
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .nav-links a:last-child {
+        border-bottom: none;
+      }
+      .nav-cta .nav-cta-text {
+        display: none;
+      }
+      .nav-cta {
+        padding: 8px 12px;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+      .hero {
+        padding: 42px 0 28px;
+      }
+      .badge {
+        font-size: 0.74rem;
+        padding: 5px 12px;
+        margin-bottom: 16px;
+        line-height: 1.35;
+        white-space: normal;
+        text-align: center;
+      }
+      h1 {
+        font-size: clamp(2rem, 7.5vw, 2.75rem);
+        line-height: 1.15;
+        margin-bottom: 14px;
+      }
+      .hero-sub {
+        font-size: 0.98rem;
+        margin-bottom: 24px;
+        line-height: 1.5;
+      }
+      .hero-actions {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 28px;
+      }
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 0.98rem;
+      }
+      .hero-meta {
+        flex-wrap: wrap;
+        gap: 6px 12px;
+        font-size: 0.78rem;
+      }
+      .mockup-header {
+        padding: 10px 12px;
+      }
+      .window-title {
+        font-size: 0.72rem;
+        margin-right: 20px;
+      }
+      .mockup-frame {
+        border-radius: 12px;
+      }
+
+      .highlights {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 44px 0 32px;
+      }
+      .highlight-card {
+        padding: 18px;
+        border-radius: var(--radius-sm);
+      }
+
+      .section-title {
+        margin-bottom: 32px;
+      }
+      .section-title h2 {
+        font-size: 1.75rem;
+      }
+      .section-title p {
+        font-size: 0.95rem;
+      }
+
+      .formats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 44px;
+      }
+      .format-card {
+        padding: 22px 18px;
+        border-radius: var(--radius-md);
+      }
+
+      .finder-section {
+        padding: 24px 16px;
+        border-radius: var(--radius-md);
+        margin: 44px 0;
+        gap: 24px;
+      }
+      .finder-content h2 {
+        font-size: 1.6rem;
+      }
+      .finder-content p {
+        font-size: 0.95rem;
+      }
+      .finder-context-menu {
+        width: 100%;
+        max-width: 240px;
+      }
+
+      .comparison-section {
+        margin: 44px auto;
+      }
+      .scroll-hint {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: #60a5fa;
+        margin-bottom: 12px;
+        padding: 6px 14px;
+        background: rgba(37, 99, 235, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        border-radius: 999px;
+      }
+      .comparison-table-wrapper {
+        border-radius: var(--radius-md);
+        -webkit-overflow-scrolling: touch;
+      }
+      table {
+        min-width: 580px;
+      }
+      th, td {
+        padding: 12px 14px;
+        font-size: 0.82rem;
+      }
+
+      .faq-section {
+        margin: 44px auto;
+      }
+      .faq-question {
+        padding: 16px 18px;
+        font-size: 0.92rem;
+      }
+      .faq-answer {
+        padding: 0 18px 16px;
+        font-size: 0.86rem;
+      }
+
+      .download-banner {
+        padding: 34px 18px;
+        border-radius: var(--radius-md);
+        margin: 44px 0 50px;
+      }
+      .download-banner h2 {
+        font-size: 1.65rem;
+      }
+      .download-banner p {
+        font-size: 0.95rem;
+        margin-bottom: 22px;
+      }
+      .download-banner .btn-primary {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.98rem;
+        padding: 14px 20px;
+      }
+
+      footer {
+        padding: 32px 16px;
+        font-size: 0.8rem;
+      }
+      .footer-links {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.95rem;
+      }
+      .brand span {
+        font-size: 1.1rem;
+      }
+      .btn-primary, .btn-secondary {
+        font-size: 0.92rem;
+      }
     }
   </style>
 </head>
@@ -670,17 +928,24 @@
         <img src="assets/app_icon.png" alt="Compressor Icon">
         <span>Compressor</span>
       </a>
-      <ul class="nav-links">
+      <ul class="nav-links" id="navLinks">
         <li><a href="#caracteristicas">Características</a></li>
         <li><a href="#formatos">Formatos</a></li>
         <li><a href="#finder">Finder</a></li>
         <li><a href="#comparativa">Comparativa</a></li>
         <li><a href="#faq">Preguntas</a></li>
       </ul>
-      <a href="https://github.com/infoprojectstone/compressor/releases" class="nav-cta" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-        <span>GitHub</span>
-      </a>
+      <div class="nav-actions">
+        <a href="https://github.com/infoprojectstone/compressor/releases" class="nav-cta" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          <span class="nav-cta-text">GitHub</span>
+        </a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú de navegación">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -890,7 +1155,9 @@
         <h2>¿Por qué Compressor es diferente?</h2>
         <p>Comparación con servicios online tradicionales y herramientas web.</p>
       </div>
-
+      <div class="scroll-hint">
+        <span>↔</span> Desliza horizontalmente para ver la tabla completa
+      </div>
       <div class="comparison-table-wrapper">
         <table>
           <thead>
@@ -1022,6 +1289,22 @@
   </footer>
 
   <script>
+    // Mobile navigation drawer toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (mobileToggle && navLinks) {
+      mobileToggle.addEventListener('click', () => {
+        mobileToggle.classList.toggle('active');
+        navLinks.classList.toggle('open');
+      });
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileToggle.classList.remove('active');
+          navLinks.classList.remove('open');
+        });
+      });
+    }
+
     // Smooth accordion for FAQ
     document.querySelectorAll('.faq-question').forEach(q => {
       q.addEventListener('click', () => {
