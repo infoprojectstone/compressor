@@ -69,12 +69,12 @@ enum SafePDFCompressor: Sendable {
             }
         }
 
-        let containsText = hasSelectableText(doc: doc)
+        let preserveVector = hasSelectableText(doc: doc) || hasLinksOrAnnotations(doc: doc)
 
         // NIVEL 2: Rasterización adaptativa inteligente.
-        // IMPORTANTE: Se omite si el documento contiene texto seleccionable para no destruir búsqueda, texto ni enlaces.
-        // Solo se utiliza en documentos que son escaneos puros (sin texto seleccionable).
-        if !containsText && (bestSize > targetBytes || bestSize >= Int64(Double(originalBytes) * 0.95)) {
+        // IMPORTANTE: Se omite si el documento contiene texto seleccionable, enlaces o anotaciones para no destruirlos.
+        // Solo se utiliza en documentos que son escaneos puros (sin texto ni anotaciones).
+        if !preserveVector && (bestSize > targetBytes || bestSize >= Int64(Double(originalBytes) * 0.95)) {
             let rasterCandidate = tempFolder.appendingPathComponent("tier2_raster.pdf")
             let rasterSuccess = compressWithAdaptiveRasterization(
                 doc: doc,
@@ -176,6 +176,14 @@ enum SafePDFCompressor: Sendable {
         }
 
         ctx.closePDF()
+        guard FileManager.default.fileExists(atPath: outURL.path) else { return false }
+
+        // Preservar anotaciones, enlaces hipertexto, índice y metadatos del documento original
+        if let compressedDoc = PDFDocument(url: outURL) {
+            transferMetadataAndAnnotations(from: doc, to: compressedDoc)
+            compressedDoc.write(to: outURL)
+        }
+
         return FileManager.default.fileExists(atPath: outURL.path)
     }
 
@@ -284,6 +292,7 @@ enum SafePDFCompressor: Sendable {
         }
 
         guard outputDoc.pageCount > 0 else { return false }
+        transferMetadataAndAnnotations(from: doc, to: outputDoc)
         return outputDoc.write(to: outURL)
     }
 
@@ -294,6 +303,110 @@ enum SafePDFCompressor: Sendable {
             }
         }
         return false
+    }
+
+    private static func hasLinksOrAnnotations(doc: PDFDocument) -> Bool {
+        for i in 0..<doc.pageCount {
+            if let page = doc.page(at: i), !page.annotations.isEmpty {
+                return true
+            }
+        }
+        return false
+    }
+
+    private static func transferMetadataAndAnnotations(from srcDoc: PDFDocument, to dstDoc: PDFDocument) {
+        if let attrs = srcDoc.documentAttributes {
+            dstDoc.documentAttributes = attrs
+        }
+
+        let pageLimit = min(srcDoc.pageCount, dstDoc.pageCount)
+        for i in 0..<pageLimit {
+            guard let srcPage = srcDoc.page(at: i), let dstPage = dstDoc.page(at: i) else { continue }
+            for annot in srcPage.annotations {
+                if let fresh = cloneAnnotation(annot, srcDoc: srcDoc, dstDoc: dstDoc) {
+                    dstPage.addAnnotation(fresh)
+                }
+            }
+        }
+
+        if let srcRoot = srcDoc.outlineRoot {
+            let newRoot = PDFOutline()
+            for i in 0..<srcRoot.numberOfChildren {
+                if let child = srcRoot.child(at: i), let childCopy = copyOutline(child, srcDoc: srcDoc, dstDoc: dstDoc) {
+                    newRoot.insertChild(childCopy, at: newRoot.numberOfChildren)
+                }
+            }
+            if newRoot.numberOfChildren > 0 {
+                dstDoc.outlineRoot = newRoot
+            }
+        }
+    }
+
+    private static func cloneAnnotation(_ a: PDFAnnotation, srcDoc: PDFDocument, dstDoc: PDFDocument) -> PDFAnnotation? {
+        guard a.type != "Popup" else { return nil }
+        let subtype = PDFAnnotationSubtype(rawValue: a.type ?? "Link")
+        let fresh = PDFAnnotation(bounds: a.bounds, forType: subtype, withProperties: nil)
+
+        // Metadatos y apariencia general
+        fresh.contents = a.contents
+        fresh.color = a.color
+        fresh.border = a.border
+        fresh.font = a.font
+        fresh.fontColor = a.fontColor
+        fresh.alignment = a.alignment
+        fresh.modificationDate = a.modificationDate
+        fresh.userName = a.userName
+
+        // Enlaces e hipervínculos externos
+        if let url = a.url {
+            fresh.url = url
+            fresh.action = PDFActionURL(url: url)
+        } else if let urlAction = a.action as? PDFActionURL, let u = urlAction.url {
+            fresh.url = u
+            fresh.action = PDFActionURL(url: u)
+        }
+
+        // Enlaces y destinos internos (saltos de página, índice)
+        var targetDest: PDFDestination? = nil
+        if let dest = a.destination, let page = dest.page {
+            let idx = srcDoc.index(for: page)
+            if idx != NSNotFound, let newPage = dstDoc.page(at: idx) {
+                targetDest = PDFDestination(page: newPage, at: dest.point)
+            }
+        } else if let gotoAction = a.action as? PDFActionGoTo, let page = gotoAction.destination.page {
+            let idx = srcDoc.index(for: page)
+            if idx != NSNotFound, let newPage = dstDoc.page(at: idx) {
+                targetDest = PDFDestination(page: newPage, at: gotoAction.destination.point)
+            }
+        }
+
+        if let td = targetDest {
+            fresh.destination = td
+            fresh.action = PDFActionGoTo(destination: td)
+        }
+
+        return fresh
+    }
+
+    private static func copyOutline(_ node: PDFOutline, srcDoc: PDFDocument, dstDoc: PDFDocument) -> PDFOutline? {
+        let copy = PDFOutline()
+        copy.label = node.label
+        copy.isOpen = node.isOpen
+        if let action = node.action {
+            copy.action = action
+        }
+        if let dest = node.destination, let targetPage = dest.page {
+            let pageIndex = srcDoc.index(for: targetPage)
+            if pageIndex != NSNotFound, let newTargetPage = dstDoc.page(at: pageIndex) {
+                copy.destination = PDFDestination(page: newTargetPage, at: dest.point)
+            }
+        }
+        for i in 0..<node.numberOfChildren {
+            if let child = node.child(at: i), let childCopy = copyOutline(child, srcDoc: srcDoc, dstDoc: dstDoc) {
+                copy.insertChild(childCopy, at: copy.numberOfChildren)
+            }
+        }
+        return copy
     }
 
     private static func finalize(

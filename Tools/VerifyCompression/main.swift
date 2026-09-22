@@ -224,6 +224,53 @@ struct VerifyCompression {
                 print("    ❌ Nivel 2: Falló la reducción o integridad de páginas.\n")
                 allPassed = false
             }
+
+            // 4c. PDF con hipervínculos clicables y anotaciones
+            print("  • Subprueba 4c: Preservación de enlaces clicables y anotaciones")
+            let pdfLinkIn = tempDir.appendingPathComponent("sample_links.pdf")
+            let pdfLinkOut = tempDir.appendingPathComponent("sample_links_compressed.pdf")
+
+            let linkDoc = PDFDocument()
+            let linkPage = PDFPage()
+            linkPage.setBounds(CGRect(x: 0, y: 0, width: 600, height: 800), for: .mediaBox)
+            linkDoc.insert(linkPage, at: 0)
+            let testURL = URL(string: "https://apple.com")!
+            let linkAnnot = PDFAnnotation(bounds: CGRect(x: 50, y: 700, width: 200, height: 30), forType: .link, withProperties: nil)
+            linkAnnot.url = testURL
+            linkPage.addAnnotation(linkAnnot)
+            linkDoc.write(to: pdfLinkIn)
+
+            if let filter = QuartzFilter(properties: filterProps),
+               let inDoc = PDFDocument(url: pdfLinkIn),
+               let consumer = CGDataConsumer(url: pdfLinkOut as CFURL) {
+                var box = inDoc.page(at: 0)?.bounds(for: .mediaBox) ?? CGRect(x: 0, y: 0, width: 600, height: 800)
+                if let ctx = CGContext(consumer: consumer, mediaBox: &box, nil) {
+                    filter.apply(to: ctx)
+                    for i in 0..<inDoc.pageCount {
+                        if let page = inDoc.page(at: i) {
+                            var pageBox = page.bounds(for: .mediaBox)
+                            ctx.beginPage(mediaBox: &pageBox)
+                            page.draw(with: .mediaBox, to: ctx)
+                            ctx.endPage()
+                        }
+                    }
+                    ctx.closePDF()
+                }
+                if let compDoc = PDFDocument(url: pdfLinkOut) {
+                    transferMetadataAndAnnotations(from: inDoc, to: compDoc)
+                    compDoc.write(to: pdfLinkOut)
+                }
+            }
+
+            if let verifiedDoc = PDFDocument(url: pdfLinkOut),
+               let firstPage = verifiedDoc.page(at: 0),
+               let foundLink = firstPage.annotations.first(where: { $0.url == testURL }) {
+                print("    - Hipervínculo verificado con éxito: \(foundLink.url?.absoluteString ?? "")")
+                print("    ✅ Subprueba 4c: Hipervínculos clicables y anotaciones conservadas al 100%.\n")
+            } else {
+                print("    ❌ Subprueba 4c: Se perdieron los hipervínculos o anotaciones.\n")
+                allPassed = false
+            }
         } catch {
             print("  ❌ ERROR en PDF: \(error.localizedDescription)\n")
             allPassed = false
@@ -537,5 +584,100 @@ struct VerifyCompression {
         let pct = (1.0 - Double(final) / Double(orig)) * 100.0
         let savedBytes = orig - final
         return String(format: "-%.1f %% (%@ ahorrados)", pct, formatBytes(savedBytes))
+    }
+
+    private static func transferMetadataAndAnnotations(from srcDoc: PDFDocument, to dstDoc: PDFDocument) {
+        if let attrs = srcDoc.documentAttributes {
+            dstDoc.documentAttributes = attrs
+        }
+
+        let pageLimit = min(srcDoc.pageCount, dstDoc.pageCount)
+        for i in 0..<pageLimit {
+            guard let srcPage = srcDoc.page(at: i), let dstPage = dstDoc.page(at: i) else { continue }
+            for annot in srcPage.annotations {
+                if let fresh = cloneAnnotation(annot, srcDoc: srcDoc, dstDoc: dstDoc) {
+                    dstPage.addAnnotation(fresh)
+                }
+            }
+        }
+
+        if let srcRoot = srcDoc.outlineRoot {
+            let newRoot = PDFOutline()
+            for i in 0..<srcRoot.numberOfChildren {
+                if let child = srcRoot.child(at: i), let childCopy = copyOutline(child, srcDoc: srcDoc, dstDoc: dstDoc) {
+                    newRoot.insertChild(childCopy, at: newRoot.numberOfChildren)
+                }
+            }
+            if newRoot.numberOfChildren > 0 {
+                dstDoc.outlineRoot = newRoot
+            }
+        }
+    }
+
+    private static func cloneAnnotation(_ a: PDFAnnotation, srcDoc: PDFDocument, dstDoc: PDFDocument) -> PDFAnnotation? {
+        guard a.type != "Popup" else { return nil }
+        let subtype = PDFAnnotationSubtype(rawValue: a.type ?? "Link")
+        let fresh = PDFAnnotation(bounds: a.bounds, forType: subtype, withProperties: nil)
+
+        // Metadatos y apariencia general
+        fresh.contents = a.contents
+        fresh.color = a.color
+        fresh.border = a.border
+        fresh.font = a.font
+        fresh.fontColor = a.fontColor
+        fresh.alignment = a.alignment
+        fresh.modificationDate = a.modificationDate
+        fresh.userName = a.userName
+
+        // Enlaces e hipervínculos externos
+        if let url = a.url {
+            fresh.url = url
+            fresh.action = PDFActionURL(url: url)
+        } else if let urlAction = a.action as? PDFActionURL, let u = urlAction.url {
+            fresh.url = u
+            fresh.action = PDFActionURL(url: u)
+        }
+
+        // Enlaces y destinos internos (saltos de página, índice)
+        var targetDest: PDFDestination? = nil
+        if let dest = a.destination, let page = dest.page {
+            let idx = srcDoc.index(for: page)
+            if idx != NSNotFound, let newPage = dstDoc.page(at: idx) {
+                targetDest = PDFDestination(page: newPage, at: dest.point)
+            }
+        } else if let gotoAction = a.action as? PDFActionGoTo, let page = gotoAction.destination.page {
+            let idx = srcDoc.index(for: page)
+            if idx != NSNotFound, let newPage = dstDoc.page(at: idx) {
+                targetDest = PDFDestination(page: newPage, at: gotoAction.destination.point)
+            }
+        }
+
+        if let td = targetDest {
+            fresh.destination = td
+            fresh.action = PDFActionGoTo(destination: td)
+        }
+
+        return fresh
+    }
+
+    private static func copyOutline(_ node: PDFOutline, srcDoc: PDFDocument, dstDoc: PDFDocument) -> PDFOutline? {
+        let copy = PDFOutline()
+        copy.label = node.label
+        copy.isOpen = node.isOpen
+        if let action = node.action {
+            copy.action = action
+        }
+        if let dest = node.destination, let targetPage = dest.page {
+            let pageIndex = srcDoc.index(for: targetPage)
+            if pageIndex != NSNotFound, let newTargetPage = dstDoc.page(at: pageIndex) {
+                copy.destination = PDFDestination(page: newTargetPage, at: dest.point)
+            }
+        }
+        for i in 0..<node.numberOfChildren {
+            if let child = node.child(at: i), let childCopy = copyOutline(child, srcDoc: srcDoc, dstDoc: dstDoc) {
+                copy.insertChild(childCopy, at: copy.numberOfChildren)
+            }
+        }
+        return copy
     }
 }

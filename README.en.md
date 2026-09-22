@@ -47,7 +47,7 @@
 * 📁 **Finder Integration:** Compress files or entire folders with a single right-click from Finder's context menu without opening the app beforehand.
 * 🎯 **Dual Operation Modes:**
   * **Quality Mode:** Choose between *High quality*, *Balanced*, or *Small size*.
-  * **Target Size Mode:** Specify the approximate desired target size in megabytes (MB) (ideal for email, WhatsApp, or platforms with strict upload limits).
+  * **Target Size Mode:** Specify an approximate target size in megabytes (MB) (ideal for email, WhatsApp, or platforms with strict upload limits).
 
 ---
 
