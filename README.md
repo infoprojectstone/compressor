@@ -1,5 +1,9 @@
 <div align="center">
 
+  <p>
+    <b>Español</b> | <a href="README.en.md">English</a>
+  </p>
+
   <img src="docs/assets/app_icon.png" width="128" height="128" alt="Compressor App Icon" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
   # Compressor para macOS

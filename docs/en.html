@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -935,8 +935,8 @@
       </ul>
       <div class="nav-actions">
         <div class="lang-switch" role="group" aria-label="Seleccionar idioma / Select language">
-          <button type="button" class="lang-btn" data-lang="es">ES</button>
-          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn active" data-lang="es">ES</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
         </div>
         <a href="https://github.com/infoprojectstone/compressor/releases" class="nav-cta" target="_blank">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
@@ -1175,13 +1175,13 @@
             </tr>
             <tr>
               <td><strong data-i18n="row_spd_title">Velocidad de proceso</strong></td>
-              <td class="col-compressor" data-i18n="row_spd_comp">⚡ Fast (GPU Accelerated)</td>
+              <td class="col-compressor" data-i18n="row_spd_comp">⚡ Rápido (Acelerado por GPU)</td>
               <td data-i18n="row_spd_online">🐢 Lento (Sujeto a tu velocidad de subida)</td>
               <td data-i18n="row_spd_paid">⚡ Rápido</td>
             </tr>
             <tr>
               <td><strong data-i18n="row_cst_title">Coste</strong></td>
-              <td class="col-compressor" data-i18n="row_cst_comp">🎁 Free & Open Source</td>
+              <td class="col-compressor" data-i18n="row_cst_comp">🎁 Gratis y Open Source</td>
               <td data-i18n="row_cst_online">❌ Suscripciones o colas de espera</td>
               <td data-i18n="row_cst_paid">❌ 40€ - 80€ / año</td>
             </tr>
@@ -1247,6 +1247,16 @@
       </div>
       <div class="faq-answer" data-i18n-html="faq_a4">
         El motor analiza el peso resultante. Si el archivo resultante no es estrictamente más pequeño que el original, lo descarta automáticamente y te muestra el estado <em>"Sin mejora"</em> para no hacerte perder tiempo ni calidad innecesaria.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span data-i18n="faq_q_intel">¿Es compatible con ordenadores Mac con procesador Intel?</span>
+        <span>+</span>
+      </div>
+      <div class="faq-answer" data-i18n-html="faq_a_intel">
+        No. Compressor está compilado y optimizado exclusivamente de forma nativa para la arquitectura <strong>Apple Silicon</strong> (chips M1, M2, M3, M4 o posteriores). No es compatible con procesadores Intel.
       </div>
     </div>
   </section>
@@ -1417,6 +1427,8 @@
         faq_a3: "Nunca. Los archivos originales permanecen intactos. Por defecto, Compressor crea una carpeta llamada <code>Comprimidos</code> al lado del archivo con el resultado optimizado. También puedes configurarlo para guardar junto al original o en cualquier carpeta que elijas.",
         faq_q4: "¿Qué hace el programa si un archivo no se puede comprimir más?",
         faq_a4: "El motor analiza el peso resultante. Si el archivo resultante no es estrictamente más pequeño que el original, lo descarta automáticamente y te muestra el estado <em>\"Sin mejora\"</em> para no hacerte perder tiempo ni calidad innecesaria.",
+        faq_q_intel: "¿Es compatible con ordenadores Mac con procesador Intel?",
+        faq_a_intel: "No. Compressor está compilado y optimizado exclusivamente de forma nativa para la arquitectura <strong>Apple Silicon</strong> (chips M1, M2, M3, M4 o posteriores). No es compatible con procesadores Intel.",
         bnr_title: "Empieza a ahorrar espacio hoy mismo",
         bnr_sub: "Descarga Compressor de forma gratuita y optimiza tus imágenes, vídeos y PDFs en segundos con total privacidad.",
         bnr_btn: "Descargar Compressor para macOS",
@@ -1526,6 +1538,8 @@
         faq_a3: "Never. Original files remain completely untouched. By default, Compressor saves optimized files inside a folder named <code>Comprimidos</code> (Compressed) next to the original. You can also configure it to save alongside the source or in any custom folder.",
         faq_q4: "What happens if a file cannot be compressed any further?",
         faq_a4: "The engine analyzes the output size. If the resulting file isn\'t strictly smaller than the original, it is discarded automatically and displays a <em>\"No improvement\"</em> status so you never waste quality or storage.",
+        faq_q_intel: "Is it compatible with Intel-based Mac computers?",
+        faq_a_intel: "No. Compressor is built and optimized exclusively for native <strong>Apple Silicon</strong> architecture (M1, M2, M3, M4 or later chips). Intel processors are not supported.",
         bnr_title: "Start saving disk space today",
         bnr_sub: "Download Compressor for free and optimize your images, videos, and PDFs in seconds with complete privacy.",
         bnr_btn: "Download Compressor for macOS",
@@ -1590,7 +1604,7 @@
       const savedLang = localStorage.getItem('compressor_lang');
       const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('en') ? 'en' : 'es';
       
-      const initialLang = urlLang || savedLang || 'en';
+      const initialLang = urlLang || savedLang || browserLang;
       if (initialLang === 'en') {
         setLanguage('en');
       }
