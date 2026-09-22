@@ -19,6 +19,11 @@ mkdir -p "$STAGING_DIR"
 # Copiar Compressor.app
 ditto "$APP_PATH" "$STAGING_DIR/Compressor.app"
 
+# Copiar Acción Rápida para instalación opcional desde el DMG
+if [ -d "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" ]; then
+    ditto "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" "$STAGING_DIR/Comprimir con Compresor.workflow"
+fi
+
 # Crear enlace simbólico a /Applications
 ln -s /Applications "$STAGING_DIR/Applications"
 

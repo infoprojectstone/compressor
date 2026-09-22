@@ -16,6 +16,10 @@ mkdir -p "$TEMP_APP/Contents/MacOS" "$TEMP_APP/Contents/Resources" "$TEMP_ROOT/A
 cp "$TEMP_ROOT/swift-build/release/CompresorUnificado" "$TEMP_APP/Contents/MacOS/CompresorUnificado"
 cp "$PROJECT_DIR/Resources/Info.plist" "$TEMP_APP/Contents/Info.plist"
 cp "$PROJECT_DIR/Resources/AppIconSource.png" "$TEMP_APP/Contents/Resources/AppIconSource.png"
+if [ -d "$PROJECT_DIR/Resources/QuickAction" ]; then
+  cp -R "$PROJECT_DIR/Resources/QuickAction" "$TEMP_APP/Contents/Resources/QuickAction"
+  cp -R "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" "$TEMP_APP/Contents/Resources/Comprimir con Compresor.workflow"
+fi
 for SIZE in 16 32 128 256 512; do
   sips -s format png -z "$SIZE" "$SIZE" "$PROJECT_DIR/Resources/AppIconSource.png" --out "$TEMP_ROOT/AppIcon.iconset/icon_${SIZE}x${SIZE}.png" >/dev/null
   DOUBLE_SIZE=$((SIZE * 2))
@@ -35,6 +39,11 @@ codesign --verify --deep --strict "$APP_DIR"
 
 export COPYFILE_DISABLE=1
 (cd "$BUILD_DIR" && zip -qry -X "Compressor-1.2.zip" "Compressor.app")
+
+if [ -d "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" ]; then
+  rm -rf "$BUILD_DIR/Comprimir con Compresor.workflow"
+  cp -R "$PROJECT_DIR/Resources/QuickAction/Comprimir con Compresor.workflow" "$BUILD_DIR/Comprimir con Compresor.workflow"
+fi
 
 echo "Aplicación creada en: $APP_DIR"
 echo "Zip empaquetado en: $BUILD_DIR/Compressor-1.2.zip"

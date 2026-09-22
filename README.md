@@ -30,6 +30,16 @@ Imágenes, vídeo y PDF comparten dos modos:
 
 Desde Ajustes se puede guardar el resultado en una subcarpeta `Comprimidos` junto al original (opción predeterminada), junto al propio archivo o en una carpeta personalizada. Los originales nunca se sobrescriben y los nombres de salida siempre son únicos.
 
+## Integración con Finder (Acción Rápida)
+
+Puedes comprimir cualquier archivo o carpeta directamente desde Finder sin necesidad de abrir la aplicación antes:
+
+1. **Desde la aplicación:** Ve a **Ajustes** (Cmd + ,) > **Integración con Finder** y pulsa en **Instalar**.
+2. **Desde el instalador DMG:** Haz doble clic sobre `Comprimir con Compresor.workflow` para instalar la Acción Rápida.
+3. Una vez instalada, haz clic derecho sobre cualquier imagen, vídeo, PDF o carpeta en Finder y selecciona:
+   * **Acciones rápidas > Comprimir con Compresor** (o en el menú de Servicios).
+   * La aplicación se abrirá automáticamente seleccionando la pestaña correspondiente y encolando los archivos seleccionados.
+
 ## Instalación para usuarios (Gatekeeper)
 
 Al ser una aplicación independiente distribuida sin certificado de pago de Apple Developer:
@@ -37,4 +47,5 @@ Al ser una aplicación independiente distribuida sin certificado de pago de Appl
 2. La primera vez que la abras, si macOS muestra el aviso *"no se puede abrir porque Apple no puede comprobar si contiene software malicioso"*:
    - Haz **clic derecho** (o Control + clic) sobre la aplicación en Aplicaciones y selecciona **Abrir**.
    - O bien ve a **Ajustes del Sistema > Privacidad y seguridad** y pulsa en **"Abrir igualmente"**.
+
 

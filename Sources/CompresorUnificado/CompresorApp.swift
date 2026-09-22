@@ -52,6 +52,8 @@ struct CompressionConfig: Sendable {
 enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { return "—" }; let f = ByteCountFormatter(); f.allowedUnits = [.useKB,.useMB,.useGB]; f.countStyle = .file; return f.string(fromByteCount: n) } }
 
 @MainActor final class CompressorModel: ObservableObject {
+    static let shared = CompressorModel()
+
     @Published var kind: ContentKind = .image { didSet { clear() } }
     @Published var jobs: [Job] = []
     @Published var isWorking = false
@@ -97,6 +99,46 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         let files = discover(urls).filter { !existing.contains($0.standardizedFileURL) }
         jobs += files.map { Job(url: $0, originalBytes: Self.size($0)) }
         message = files.isEmpty ? tr("No se encontraron archivos compatibles nuevos.", "No new compatible files were found.") : nil
+    }
+    func handleIncoming(_ urls: [URL]) {
+        guard !urls.isEmpty else { return }
+        var imageCount = 0
+        var videoCount = 0
+        var pdfCount = 0
+        let fm = FileManager.default
+
+        for url in urls {
+            var isDir: ObjCBool = false
+            if fm.fileExists(atPath: url.path, isDirectory: &isDir) {
+                if !isDir.boolValue {
+                    let ext = url.pathExtension.lowercased()
+                    if ContentKind.image.extensions.contains(ext) { imageCount += 1 }
+                    else if ContentKind.video.extensions.contains(ext) { videoCount += 1 }
+                    else if ContentKind.pdf.extensions.contains(ext) { pdfCount += 1 }
+                } else if let enumerator = fm.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) {
+                    for case let fileURL as URL in enumerator {
+                        let ext = fileURL.pathExtension.lowercased()
+                        if ContentKind.image.extensions.contains(ext) { imageCount += 1 }
+                        else if ContentKind.video.extensions.contains(ext) { videoCount += 1 }
+                        else if ContentKind.pdf.extensions.contains(ext) { pdfCount += 1 }
+                    }
+                }
+            }
+        }
+
+        if videoCount > imageCount && videoCount > pdfCount {
+            self.kind = .video
+        } else if pdfCount > imageCount && pdfCount > videoCount {
+            self.kind = .pdf
+        } else if imageCount > 0 {
+            self.kind = .image
+        }
+
+        self.add(urls)
+        NSApp.activate(ignoringOtherApps: true)
+        if let window = NSApp.windows.first(where: { $0.canBecomeMain }) ?? NSApp.windows.first {
+            window.makeKeyAndOrderFront(nil)
+        }
     }
     func reveal() { let output = jobs.compactMap(\.result); guard !output.isEmpty else { return }; NSWorkspace.shared.activateFileViewerSelecting(output) }
     func togglePause() {
@@ -620,6 +662,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let url = Bundle.main.url(forResource:"AppIconSource", withExtension:"png"),
            let icon = NSImage(contentsOf:url) {
             NSApp.applicationIconImage = icon
+        }
+        NSApp.servicesProvider = self
+    }
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        Task { @MainActor in
+            CompressorModel.shared.handleIncoming(urls)
+        }
+    }
+
+    @objc func compressFilesService(_ pboard: NSPasteboard, userData: String, error: AutoreleasingUnsafeMutablePointer<NSString>) {
+        guard let urls = pboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL], !urls.isEmpty else { return }
+        Task { @MainActor in
+            CompressorModel.shared.handleIncoming(urls)
         }
     }
 

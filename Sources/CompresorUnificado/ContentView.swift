@@ -3,7 +3,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ContentView: View {
-    @StateObject private var model = CompressorModel()
+    @ObservedObject private var model = CompressorModel.shared
     @AppStorage("appLanguage") private var languageRaw = AppLanguage.spanish.rawValue
     private var language: AppLanguage { AppLanguage(rawValue:languageRaw) ?? .spanish }
     var body: some View {
@@ -14,6 +14,7 @@ struct ContentView: View {
         }
         .background(Color(nsColor: .windowBackgroundColor))
         .onDrop(of: [.fileURL], isTargeted: $model.dropTargeted) { items in load(items); return true }
+        .onOpenURL { url in model.handleIncoming([url]) }
     }
     private var sidebar: some View {
         VStack(alignment: .leading, spacing: 8) {

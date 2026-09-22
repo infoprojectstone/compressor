@@ -16,7 +16,50 @@ func tr(_ spanish: String, _ english: String, language: AppLanguage = .current) 
     language == .spanish ? spanish : english
 }
 
+@MainActor
+final class SettingsModel: ObservableObject {
+    @Published var quickActionInstalled: Bool = false
+
+    var userServicesWorkflowURL: URL {
+        FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Services/Comprimir con Compresor.workflow")
+    }
+
+    func checkStatus() {
+        quickActionInstalled = FileManager.default.fileExists(atPath: userServicesWorkflowURL.path)
+    }
+
+    func installQuickAction() {
+        let fm = FileManager.default
+        let servicesDir = fm.homeDirectoryForCurrentUser.appendingPathComponent("Library/Services")
+        try? fm.createDirectory(at: servicesDir, withIntermediateDirectories: true)
+        let target = userServicesWorkflowURL
+        try? fm.removeItem(at: target)
+
+        var sourceURL: URL?
+        if let direct = Bundle.main.url(forResource: "Comprimir con Compresor", withExtension: "workflow") {
+            sourceURL = direct
+        } else if let nested = Bundle.main.resourceURL?.appendingPathComponent("QuickAction/Comprimir con Compresor.workflow"), fm.fileExists(atPath: nested.path) {
+            sourceURL = nested
+        }
+
+        if let sourceURL {
+            try? fm.copyItem(at: sourceURL, to: target)
+        }
+        NSUpdateDynamicServices()
+        checkStatus()
+    }
+
+    func uninstallQuickAction() {
+        try? FileManager.default.removeItem(at: userServicesWorkflowURL)
+        NSUpdateDynamicServices()
+        checkStatus()
+    }
+}
+
+@MainActor
 struct SettingsView: View {
+    @StateObject private var model = SettingsModel()
     @AppStorage("appLanguage") private var languageRaw = AppLanguage.spanish.rawValue
     @AppStorage("outputDestination") private var outputDestinationRaw = OutputDestination.subfolder.rawValue
     @AppStorage("customOutputFolderPath") private var customFolderPath = ""
@@ -32,6 +75,32 @@ struct SettingsView: View {
                     ForEach(AppLanguage.allCases) { option in Text(option.name).tag(option.rawValue) }
                 }
                 .pickerStyle(.segmented)
+            }
+            Section(tr("Integración con Finder", "Finder Integration", language:language)) {
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: model.quickActionInstalled ? "checkmark.circle.fill" : "wand.and.stars")
+                        .font(.title2)
+                        .foregroundStyle(model.quickActionInstalled ? .green : .blue)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(model.quickActionInstalled ? tr("Acción Rápida instalada en Finder", "Quick Action installed in Finder", language:language) : tr("Acción Rápida no instalada", "Quick Action not installed", language:language))
+                            .fontWeight(.medium)
+                        Text(model.quickActionInstalled ? tr("Haz clic derecho sobre cualquier archivo o carpeta en Finder > Acciones rápidas > Comprimir con Compresor.", "Right click any file or folder in Finder > Quick Actions > Compress with Compressor.", language:language) : tr("Añade la opción 'Comprimir con Compresor' al menú de clic derecho (Acciones rápidas) de Finder.", "Adds 'Compress with Compressor' to the Finder right-click menu (Quick Actions).", language:language))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if model.quickActionInstalled {
+                        Button(tr("Desinstalar", "Uninstall", language:language), role: .destructive) {
+                            model.uninstallQuickAction()
+                        }
+                    } else {
+                        Button(tr("Instalar", "Install", language:language)) {
+                            model.installQuickAction()
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+                .padding(.vertical, 4)
             }
             Section(tr("Guardar archivos", "Save files", language:language)) {
                 Picker(tr("Ubicación", "Location", language:language), selection:outputDestination) {
@@ -54,9 +123,12 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .padding(12)
-        .frame(width:520,height:360)
+        .frame(width:540,height:460)
         .navigationTitle(tr("Ajustes", "Settings", language:language))
-        .onAppear { loadCustomFolderPath() }
+        .onAppear {
+            loadCustomFolderPath()
+            model.checkStatus()
+        }
     }
 
     private func chooseCustomFolder() {
