@@ -40,7 +40,7 @@
 
 ## ✨ Características Principales
 
-* ⏱️ **Diseñado para Ahorrar Tiempo:** Sin colas de subida en la nube ni interfaces confusas. Arrastra archivos, elige el peso que necesitas y comprime en 2 segundos.
+* ⏱️ **Diseñado para Ahorrar Tiempo:** Sin colas de subida en la nube ni interfaces confusas. Arrastra archivos, elige el peso que necesitas y comprime en segundos.
 * 🔒 **Local y Seguro:** Tus fotografías personales, vídeos confidenciales y documentos nunca tocan la nube ni servidores de terceros. Cero telemetría y sin requerir conexión a internet.
 * ⚡ **Aceleración por GPU:** Codificación nativa de vídeo y procesamiento gráfico ultra-rápido mediante `AVFoundation`, `CoreGraphics` e `ImageIO`, optimizado para chips Apple Silicon.
 * 🛡️ **Garantía Anti-Pérdida:** Los archivos originales nunca se sobrescriben. Y si una compresión no consigue reducir el peso del archivo, el sistema lo descarta automáticamente avisándote con el estado *"Sin mejora"*.

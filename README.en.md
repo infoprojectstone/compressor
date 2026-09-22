@@ -40,7 +40,7 @@
 
 ## ✨ Key Features
 
-* ⏱️ **Designed to Save Your Time:** No tedious cloud upload queues or confusing menus. Drag your files, pick your target MB limit, and compress in 2 seconds.
+* ⏱️ **Designed to Save Your Time:** No tedious cloud upload queues or confusing menus. Drag your files, pick your target MB limit, and compress in seconds.
 * 🔒 **Local & Secure:** Your personal photos, confidential videos, and documents never touch the cloud or third-party servers. Zero telemetry and no internet connection required.
 * ⚡ **GPU Acceleration:** Native video encoding and ultra-fast graphics processing using `AVFoundation`, `CoreGraphics`, and `ImageIO`, optimized for Apple Silicon chips.
 * 🛡️ **Loss-Free Safety Guarantee:** Original files are never overwritten. If a compression fails to reduce file size, the system automatically discards the result and notifies you with the status *"No improvement"*.
