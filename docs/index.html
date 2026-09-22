@@ -131,6 +131,37 @@
       font-size: 0.9rem !important;
       transition: all 0.2s ease !important;
     }
+        .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+      user-select: none;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lang-btn:hover {
+      color: var(--text);
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
     .nav-actions {
       display: flex;
       align-items: center;
@@ -895,13 +926,17 @@
         <span>Compressor</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#caracteristicas">Características</a></li>
-        <li><a href="#formatos">Formatos</a></li>
-        <li><a href="#finder">Finder</a></li>
-        <li><a href="#comparativa">Comparativa</a></li>
-        <li><a href="#faq">Preguntas</a></li>
+        <li><a href="#caracteristicas" data-i18n="nav_features">Características</a></li>
+        <li><a href="#formatos" data-i18n="nav_formats">Formatos</a></li>
+        <li><a href="#finder" data-i18n="nav_finder">Finder</a></li>
+        <li><a href="#comparativa" data-i18n="nav_comparison">Comparativa</a></li>
+        <li><a href="#faq" data-i18n="nav_faq">Preguntas</a></li>
       </ul>
       <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Seleccionar idioma / Select language">
+          <button type="button" class="lang-btn active" data-lang="es">ES</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
         <a href="https://github.com/infoprojectstone/compressor/releases" class="nav-cta" target="_blank">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
           <span class="nav-cta-text">GitHub</span>
@@ -920,10 +955,10 @@
     <div class="container">
       <div class="badge">
         <span class="badge-dot"></span>
-        <span>macOS Ventura, Sonoma y Sequoia · 100% Nativo Apple Silicon & Intel</span>
+        <span data-i18n="badge_support">macOS Ventura, Sonoma, Sequoia y Golden Gate · 100% Nativo Apple Silicon & Intel</span>
       </div>
-      <h1>El compresor definitivo<br>diseñado para tu Mac.</h1>
-      <p class="hero-sub">
+      <h1 data-i18n-html="hero_title">El compresor definitivo<br>diseñado para tu Mac.</h1>
+      <p class="hero-sub" data-i18n="hero_sub">
         Optimiza imágenes, vídeos y documentos PDF en una única app limpia, potente y privada. 
         Todo se procesa en local con aceleración por hardware: tus archivos nunca salen de tu equipo.
       </p>
@@ -931,20 +966,20 @@
       <div class="hero-actions">
         <a href="https://github.com/infoprojectstone/compressor/releases" class="btn-primary" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>Descargar para macOS (.dmg)</span>
+          <span data-i18n="btn_download">Descargar para macOS (.dmg)</span>
         </a>
         <a href="https://github.com/infoprojectstone/compressor" class="btn-secondary" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-          <span>Código fuente (GitHub)</span>
+          <span data-i18n="btn_source">Código fuente (GitHub)</span>
         </a>
       </div>
 
       <div class="hero-meta">
-        <span>⚡ Versión 1.2</span>
+        <span data-i18n="meta_ver">⚡ Versión 1.2</span>
         <span>•</span>
-        <span>🔒 Cero telemetría</span>
+        <span data-i18n="meta_telemetry">🔒 Cero telemetría</span>
         <span>•</span>
-        <span>📁 Integrado con Finder</span>
+        <span data-i18n="meta_finder">📁 Integrado con Finder</span>
       </div>
 
       <!-- Mockup Window -->
@@ -959,23 +994,23 @@
     <div class="highlights">
       <div class="highlight-card">
         <span class="highlight-icon">🔒</span>
-        <h3>100% Local y Privado</h3>
-        <p>Tus fotos confidenciales, grabaciones y contratos nunca se suben a la nube. Sin servidores externos ni registros.</p>
+        <h3 data-i18n="hl_priv_title">100% Local y Privado</h3>
+        <p data-i18n="hl_priv_desc">Tus fotos confidenciales, grabaciones y contratos nunca se suben a la nube. Sin servidores externos ni registros.</p>
       </div>
       <div class="highlight-card">
         <span class="highlight-icon">⚡</span>
-        <h3>Aceleración por GPU</h3>
-        <p>Aprovecha los motores multimedia de los chips Apple Silicon (M1, M2, M3, M4) e Intel QuickSync para codificar a máxima velocidad.</p>
+        <h3 data-i18n="hl_gpu_title">Aceleración por GPU</h3>
+        <p data-i18n="hl_gpu_desc">Aprovecha los motores multimedia de los chips Apple Silicon e Intel QuickSync para codificar a máxima velocidad.</p>
       </div>
       <div class="highlight-card">
         <span class="highlight-icon">🛡️</span>
-        <h3>Protección Anti-Pérdida</h3>
-        <p>Tus archivos originales jamás se modifican ni sobrescriben. Y si una compresión no reduce peso, se descarta automáticamente.</p>
+        <h3 data-i18n="hl_prot_title">Protección Anti-Pérdida</h3>
+        <p data-i18n="hl_prot_desc">Tus archivos originales jamás se modifican ni sobrescriben. Y si una compresión no reduce peso, se descarta automáticamente.</p>
       </div>
       <div class="highlight-card">
         <span class="highlight-icon">🎯</span>
-        <h3>Modo Tamaño Objetivo</h3>
-        <p>Especifica el peso máximo deseado (ej. 5 MB para enviar por correo o WhatsApp) y el motor calculará la escala y calidad ideal.</p>
+        <h3 data-i18n="hl_tgt_title">Modo Tamaño Objetivo</h3>
+        <p data-i18n="hl_tgt_desc">Especifica el peso máximo deseado (ej. 5 MB para enviar por correo o WhatsApp) y el motor calculará la escala y calidad ideal.</p>
       </div>
     </div>
   </section>
@@ -983,8 +1018,8 @@
   <!-- Formats Section -->
   <section class="container" id="formatos">
     <div class="section-title">
-      <h2>Tres potentes motores en una sola app</h2>
-      <p>Olvídate de buscar herramientas web con límites de tamaño o anuncios molestos.</p>
+      <h2 data-i18n="fmt_sec_title">Tres potentes motores en una sola app</h2>
+      <p data-i18n="fmt_sec_sub">Olvídate de buscar herramientas web con límites de tamaño o anuncios molestos.</p>
     </div>
 
     <div class="formats-grid">
@@ -993,21 +1028,21 @@
         <div class="format-header">
           <div class="format-pill pill-purple">📸</div>
           <div>
-            <h3>Imágenes</h3>
+            <h3 data-i18n="fmt_img_title">Imágenes</h3>
             <span style="font-size:0.85rem; color:#c084fc;">JPG · PNG · WebP · HEIC · HEIF</span>
           </div>
         </div>
-        <p class="format-desc">
+        <p class="format-desc" data-i18n="fmt_img_desc">
           Compresión inteligente basada en ImageIO y CoreGraphics. Encuentra la máxima calidad visual manteniendo los perfiles de color y la transparencia alfa intactos.
         </p>
         <ul class="format-features">
-          <li><span class="check-icon">✓</span> Conserva formato y canal alfa original</li>
-          <li><span class="check-icon">✓</span> Ajuste de calidad fina (Alta, Equilibrada, Reducida)</li>
-          <li><span class="check-icon">✓</span> Soporte nativo para fotos HEIC del iPhone</li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_img_f1">Conserva formato y canal alfa original</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_img_f2">Ajuste de calidad fina (Alta, Equilibrada, Reducida)</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_img_f3">Soporte nativo para fotos HEIC del iPhone</span></li>
         </ul>
         <div class="format-stat">
-          <span class="stat-label">Ahorro típico:</span>
-          <span class="stat-val">hasta -70% a -90%</span>
+          <span class="stat-label" data-i18n="stat_label">Ahorro típico:</span>
+          <span class="stat-val" data-i18n="fmt_img_stat">hasta -70% a -90%</span>
         </div>
       </div>
 
@@ -1016,21 +1051,21 @@
         <div class="format-header">
           <div class="format-pill pill-pink">🎬</div>
           <div>
-            <h3>Vídeos</h3>
+            <h3 data-i18n="fmt_vid_title">Vídeos</h3>
             <span style="font-size:0.85rem; color:#f472b6;">MP4 · MOV · M4V</span>
           </div>
         </div>
-        <p class="format-desc">
+        <p class="format-desc" data-i18n="fmt_vid_desc">
           Transcodificación por hardware con AVAssetReader y AVAssetWriter. Control preciso de bitrate con codificación H.264 para máxima compatibilidad con cualquier dispositivo.
         </p>
         <ul class="format-features">
-          <li><span class="check-icon">✓</span> Audio estéreo AAC de alta fidelidad</li>
-          <li><span class="check-icon">✓</span> Escalado inteligente (1080p, 720p, 540p)</li>
-          <li><span class="check-icon">✓</span> Estimación de bitrate exacto para tamaño objetivo</li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_vid_f1">Audio estéreo AAC de alta fidelidad</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_vid_f2">Escalado inteligente (1080p, 720p, 540p)</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_vid_f3">Estimación de bitrate exacto para tamaño objetivo</span></li>
         </ul>
         <div class="format-stat">
-          <span class="stat-label">Ahorro típico:</span>
-          <span class="stat-val">hasta -50% a -85%</span>
+          <span class="stat-label" data-i18n="stat_label">Ahorro típico:</span>
+          <span class="stat-val" data-i18n="fmt_vid_stat">hasta -50% a -85%</span>
         </div>
       </div>
 
@@ -1039,21 +1074,21 @@
         <div class="format-header">
           <div class="format-pill pill-orange">📄</div>
           <div>
-            <h3>Documentos PDF</h3>
-            <span style="font-size:0.85rem; color:#fb923c;">SafePDFCompressor Híbrido</span>
+            <h3 data-i18n="fmt_pdf_title">Documentos PDF</h3>
+            <span style="font-size:0.85rem; color:#fb923c;" data-i18n="fmt_pdf_badge">SafePDFCompressor Híbrido</span>
           </div>
         </div>
-        <p class="format-desc">
+        <p class="format-desc" data-i18n="fmt_pdf_desc">
           Nuevo motor en dos niveles: Nivel 1 con QuartzFilter para comprimir fotos incrustadas conservando texto 100% vectorial, y Nivel 2 adaptativo para documentos escaneados.
         </p>
         <ul class="format-features">
-          <li><span class="check-icon">✓</span> Texto y tipografías siempre seleccionables</li>
-          <li><span class="check-icon">✓</span> Presupuesto dinámico de bytes por página</li>
-          <li><span class="check-icon">✓</span> Solución garantizada para PDFs pesados</li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_pdf_f1">Texto y tipografías siempre seleccionables</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_pdf_f2">Presupuesto dinámico de bytes por página</span></li>
+          <li><span class="check-icon">✓</span> <span data-i18n="fmt_pdf_f3">Solución garantizada para PDFs pesados</span></li>
         </ul>
         <div class="format-stat">
-          <span class="stat-label">Ahorro típico:</span>
-          <span class="stat-val">hasta -60% a -95%</span>
+          <span class="stat-label" data-i18n="stat_label">Ahorro típico:</span>
+          <span class="stat-val" data-i18n="fmt_pdf_stat">hasta -60% a -95%</span>
         </div>
       </div>
     </div>
@@ -1063,42 +1098,42 @@
   <section class="container" id="finder">
     <div class="finder-section">
       <div class="finder-content">
-        <div class="badge" style="background:rgba(236,72,153,0.12); border-color:rgba(236,72,153,0.3); color:#f472b6;">
+        <div class="badge" style="background:rgba(236,72,153,0.12); border-color:rgba(236,72,153,0.3); color:#f472b6;" data-i18n="fnd_badge">
           Acción Rápida de Finder
         </div>
-        <h2>Comprime con un clic derecho sin abrir la app.</h2>
-        <p>
+        <h2 data-i18n="fnd_title">Comprime con un clic derecho sin abrir la app.</h2>
+        <p data-i18n="fnd_desc">
           Integrado directamente en el menú contextual de macOS. Selecciona uno o cientos de archivos en Finder, haz clic derecho y compresiónalos al instante.
         </p>
         <div class="finder-steps">
           <div class="step-item">
             <div class="step-num">1</div>
-            <div class="step-text">Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>"Instalar Acción Rápida"</em>.</div>
+            <div class="step-text" data-i18n-html="fnd_step1">Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>"Instalar Acción Rápida"</em>.</div>
           </div>
           <div class="step-item">
             <div class="step-num">2</div>
-            <div class="step-text">Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.</div>
+            <div class="step-text" data-i18n="fnd_step2">Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.</div>
           </div>
           <div class="step-item">
             <div class="step-num">3</div>
-            <div class="step-text">Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!</div>
+            <div class="step-text" data-i18n-html="fnd_step3">Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!</div>
           </div>
         </div>
       </div>
       <div class="finder-preview-card">
         <div class="finder-context-menu">
-          <div class="menu-item"><span>Abrir</span></div>
-          <div class="menu-item"><span>Abrir con…</span></div>
+          <div class="menu-item"><span data-i18n="ctx_open">Abrir</span></div>
+          <div class="menu-item"><span data-i18n="ctx_openwith">Abrir con…</span></div>
           <div class="menu-sep"></div>
-          <div class="menu-item"><span>Obtener información</span></div>
-          <div class="menu-item"><span>Renombrar</span></div>
+          <div class="menu-item"><span data-i18n="ctx_getinfo">Obtener información</span></div>
+          <div class="menu-item"><span data-i18n="ctx_rename">Renombrar</span></div>
           <div class="menu-sep"></div>
           <div class="menu-item highlight">
-            <span>⚡ Comprimir con Compresor</span>
+            <span data-i18n="ctx_action">⚡ Comprimir con Compresor</span>
           </div>
-          <div class="menu-item"><span>Acciones rápidas ›</span></div>
+          <div class="menu-item"><span data-i18n="ctx_quickactions">Acciones rápidas ›</span></div>
           <div class="menu-sep"></div>
-          <div class="menu-item"><span>Trasladar a la papelera</span></div>
+          <div class="menu-item"><span data-i18n="ctx_trash">Trasladar a la papelera</span></div>
         </div>
       </div>
     </div>
@@ -1108,58 +1143,58 @@
   <section class="container" id="comparativa">
     <div class="comparison-section">
       <div class="section-title">
-        <h2>¿Por qué Compressor es diferente?</h2>
-        <p>Comparación con servicios online tradicionales y herramientas web.</p>
+        <h2 data-i18n="cmp_title">¿Por qué Compressor es diferente?</h2>
+        <p data-i18n="cmp_sub">Comparación con servicios online tradicionales y herramientas web.</p>
       </div>
       <div class="scroll-hint">
-        <span>↔</span> Desliza horizontalmente para ver la tabla completa
+        <span>↔</span> <span data-i18n="cmp_hint">Desliza horizontalmente para ver la tabla completa</span>
       </div>
       <div class="comparison-table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>Característica</th>
-              <th class="col-compressor">Compressor para Mac</th>
-              <th>Webs Online (iLovePDF, etc.)</th>
-              <th>Herramientas de Pago</th>
+              <th data-i18n="th_feature">Característica</th>
+              <th class="col-compressor" data-i18n="th_comp">Compressor para Mac</th>
+              <th data-i18n="th_online">Webs Online (iLovePDF, etc.)</th>
+              <th data-i18n="th_paid">Herramientas de Pago</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Privacidad de tus datos</strong></td>
-              <td class="col-compressor">🔒 100% Local (Nunca salen de tu Mac)</td>
-              <td>⚠️ Subida a servidores de terceros</td>
-              <td>Variable / Telemetría</td>
+              <td><strong data-i18n="row_priv_title">Privacidad de tus datos</strong></td>
+              <td class="col-compressor" data-i18n="row_priv_comp">🔒 100% Local (Nunca salen de tu Mac)</td>
+              <td data-i18n="row_priv_online">⚠️ Subida a servidores de terceros</td>
+              <td data-i18n="row_priv_paid">Variable / Telemetría</td>
             </tr>
             <tr>
-              <td><strong>Límites de tamaño o archivos</strong></td>
-              <td class="col-compressor">✅ Sin límites (Gigas o miles de archivos)</td>
-              <td>❌ Límites por archivo (ej. 25-50 MB)</td>
-              <td>✅ Ilimitado</td>
+              <td><strong data-i18n="row_lim_title">Límites de tamaño o archivos</strong></td>
+              <td class="col-compressor" data-i18n="row_lim_comp">✅ Sin límites (Gigas o miles de archivos)</td>
+              <td data-i18n="row_lim_online">❌ Límites por archivo (ej. 25-50 MB)</td>
+              <td data-i18n="row_lim_paid">✅ Ilimitado</td>
             </tr>
             <tr>
-              <td><strong>Velocidad de proceso</strong></td>
-              <td class="col-compressor">⚡ Instantáneo (Acelerado por GPU)</td>
-              <td>🐢 Lento (Sujeto a tu velocidad de subida)</td>
-              <td>⚡ Rápido</td>
+              <td><strong data-i18n="row_spd_title">Velocidad de proceso</strong></td>
+              <td class="col-compressor" data-i18n="row_spd_comp">⚡ Instantáneo (Acelerado por GPU)</td>
+              <td data-i18n="row_spd_online">🐢 Lento (Sujeto a tu velocidad de subida)</td>
+              <td data-i18n="row_spd_paid">⚡ Rápido</td>
             </tr>
             <tr>
-              <td><strong>Coste</strong></td>
-              <td class="col-compressor">🎁 100% Gratis y Open Source</td>
-              <td>❌ Suscripciones o colas de espera</td>
-              <td>❌ 40€ - 80€ / año</td>
+              <td><strong data-i18n="row_cst_title">Coste</strong></td>
+              <td class="col-compressor" data-i18n="row_cst_comp">🎁 100% Gratis y Open Source</td>
+              <td data-i18n="row_cst_online">❌ Suscripciones o colas de espera</td>
+              <td data-i18n="row_cst_paid">❌ 40€ - 80€ / año</td>
             </tr>
             <tr>
-              <td><strong>Funciona sin conexión (Offline)</strong></td>
-              <td class="col-compressor">✅ Sí, en cualquier lugar</td>
-              <td>❌ Requiere conexión obligatoria</td>
-              <td>✅ Sí</td>
+              <td><strong data-i18n="row_off_title">Funciona sin conexión (Offline)</strong></td>
+              <td class="col-compressor" data-i18n="row_off_comp">✅ Sí, en cualquier lugar</td>
+              <td data-i18n="row_off_online">❌ Requiere conexión obligatoria</td>
+              <td data-i18n="row_off_paid">✅ Sí</td>
             </tr>
             <tr>
-              <td><strong>Integración con Finder</strong></td>
-              <td class="col-compressor">✅ Clic derecho nativo</td>
-              <td>❌ No disponible</td>
-              <td>⚠️ Requiere extensiones pesadas</td>
+              <td><strong data-i18n="row_fnd_title">Integración con Finder</strong></td>
+              <td class="col-compressor" data-i18n="row_fnd_comp">✅ Clic derecho nativo</td>
+              <td data-i18n="row_fnd_online">❌ No disponible</td>
+              <td data-i18n="row_fnd_paid">⚠️ Requiere extensiones pesadas</td>
             </tr>
           </tbody>
         </table>
@@ -1170,46 +1205,46 @@
   <!-- FAQ Section -->
   <section class="container faq-section" id="faq">
     <div class="section-title">
-      <h2>Preguntas Frecuentes</h2>
-      <p>Todo lo que necesitas saber sobre instalación y funcionamiento.</p>
+      <h2 data-i18n="faq_title">Preguntas Frecuentes</h2>
+      <p data-i18n="faq_sub">Todo lo que necesitas saber sobre instalación y funcionamiento.</p>
     </div>
 
     <div class="faq-item">
       <div class="faq-question">
-        <span>¿Cómo instalo la aplicación desde el archivo .dmg?</span>
+        <span data-i18n="faq_q1">¿Cómo instalo la aplicación desde el archivo .dmg?</span>
         <span>+</span>
       </div>
-      <div class="faq-answer">
+      <div class="faq-answer" data-i18n-html="faq_a1">
         Descarga el archivo <code>Compressor-1.2.dmg</code>, ábrelo con doble clic y arrastra el icono de <strong>Compressor</strong> a la carpeta <strong>Aplicaciones</strong>.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-question">
-        <span>¿Qué hago si macOS muestra un aviso de desarrollador no identificado?</span>
+        <span data-i18n="faq_q2">¿Qué hago si macOS muestra un aviso de desarrollador no identificado?</span>
         <span>+</span>
       </div>
-      <div class="faq-answer">
+      <div class="faq-answer" data-i18n-html="faq_a2">
         Al ser una app gratuita de código abierto sin licencia de pago corporativa de Apple, la primera vez que la abras haz <strong>clic derecho</strong> sobre Compressor en la carpeta Aplicaciones y pulsa en <strong>Abrir</strong>. O bien ve a <em>Ajustes del Sistema > Privacidad y seguridad</em> y haz clic en <em>"Abrir igualmente"</em>.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-question">
-        <span>¿Modifica mis archivos originales?</span>
+        <span data-i18n="faq_q3">¿Modifica mis archivos originales?</span>
         <span>+</span>
       </div>
-      <div class="faq-answer">
+      <div class="faq-answer" data-i18n-html="faq_a3">
         Nunca. Los archivos originales permanecen intactos. Por defecto, Compressor crea una carpeta llamada <code>Comprimidos</code> al lado del archivo con el resultado optimizado. También puedes configurarlo para guardar junto al original o en cualquier carpeta que elijas.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-question">
-        <span>¿Qué hace el programa si un archivo no se puede comprimir más?</span>
+        <span data-i18n="faq_q4">¿Qué hace el programa si un archivo no se puede comprimir más?</span>
         <span>+</span>
       </div>
-      <div class="faq-answer">
+      <div class="faq-answer" data-i18n-html="faq_a4">
         El motor analiza el peso resultante. Si el archivo resultante no es estrictamente más pequeño que el original, lo descarta automáticamente y te muestra el estado <em>"Sin mejora"</em> para no hacerte perder tiempo ni calidad innecesaria.
       </div>
     </div>
@@ -1218,14 +1253,14 @@
   <!-- Download Banner -->
   <section class="container">
     <div class="download-banner">
-      <h2>Empieza a ahorrar espacio hoy mismo</h2>
-      <p>Descarga Compressor de forma gratuita y optimiza tus imágenes, vídeos y PDFs en segundos con total privacidad.</p>
+      <h2 data-i18n="bnr_title">Empieza a ahorrar espacio hoy mismo</h2>
+      <p data-i18n="bnr_sub">Descarga Compressor de forma gratuita y optimiza tus imágenes, vídeos y PDFs en segundos con total privacidad.</p>
       <a href="https://github.com/infoprojectstone/compressor/releases" class="btn-primary" target="_blank" style="font-size:1.15rem; padding:16px 36px;">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span>Descargar Compressor para macOS</span>
+        <span data-i18n="bnr_btn">Descargar Compressor para macOS</span>
       </a>
-      <div style="margin-top:20px; font-size:0.9rem; color:var(--text-dim);">
-        Requiere macOS 13 Ventura o posterior · Compatible con Apple Silicon M1/M2/M3/M4 e Intel
+      <div style="margin-top:20px; font-size:0.9rem; color:var(--text-dim);" data-i18n="bnr_req">
+        Requiere macOS 13 Ventura o posterior · Compatible con Apple Silicon e Intel
       </div>
     </div>
   </section>
@@ -1234,13 +1269,13 @@
   <footer>
     <div class="container">
       <div class="footer-links">
-        <a href="https://github.com/infoprojectstone/compressor" target="_blank">Repositorio en GitHub</a>
+        <a href="https://github.com/infoprojectstone/compressor" target="_blank" data-i18n="ftr_repo">Repositorio en GitHub</a>
         <span>•</span>
-        <a href="https://github.com/infoprojectstone/compressor/releases" target="_blank">Versiones (.DMG)</a>
+        <a href="https://github.com/infoprojectstone/compressor/releases" target="_blank" data-i18n="ftr_rel">Versiones (.DMG)</a>
         <span>•</span>
-        <a href="https://github.com/infoprojectstone/compressor/issues" target="_blank">Reportar un problema</a>
+        <a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" data-i18n="ftr_iss">Reportar un problema</a>
       </div>
-      <p>© 2026 Compressor para macOS · Código abierto bajo licencia MIT · 100% Local & Privado</p>
+      <p data-i18n="ftr_copy">© 2026 Compressor para macOS · Código abierto bajo licencia MIT · 100% Local & Privado</p>
     </div>
   </footer>
 
@@ -1278,6 +1313,288 @@
         }
       });
     });
+
+    // Internationalization (i18n) Dictionary & Switcher
+    const i18nData = {
+      es: {
+        page_title: "Compressor para Mac — El compresor nativo definitivo de Imágenes, Vídeo y PDF",
+        meta_desc: "Comprime imágenes, vídeos y PDFs en macOS con máxima calidad, aceleración por hardware y 100% privacidad local. Sin internet ni suscripciones.",
+        nav_features: "Características",
+        nav_formats: "Formatos",
+        nav_finder: "Finder",
+        nav_comparison: "Comparativa",
+        nav_faq: "Preguntas",
+        badge_support: "macOS Ventura, Sonoma, Sequoia y Golden Gate · 100% Nativo Apple Silicon & Intel",
+        hero_title: "El compresor definitivo<br>diseñado para tu Mac.",
+        hero_sub: "Optimiza imágenes, vídeos y documentos PDF en una única app limpia, potente y privada. Todo se procesa en local con aceleración por hardware: tus archivos nunca salen de tu equipo.",
+        btn_download: "Descargar para macOS (.dmg)",
+        btn_source: "Código fuente (GitHub)",
+        meta_ver: "⚡ Versión 1.2",
+        meta_telemetry: "🔒 Cero telemetría",
+        meta_finder: "📁 Integrado con Finder",
+        hl_priv_title: "100% Local y Privado",
+        hl_priv_desc: "Tus fotos confidenciales, grabaciones y contratos nunca se suben a la nube. Sin servidores externos ni registros.",
+        hl_gpu_title: "Aceleración por GPU",
+        hl_gpu_desc: "Aprovecha los motores multimedia de los chips Apple Silicon e Intel QuickSync para codificar a máxima velocidad.",
+        hl_prot_title: "Protección Anti-Pérdida",
+        hl_prot_desc: "Tus archivos originales jamás se modifican ni sobrescriben. Y si una compresión no reduce peso, se descarta automáticamente.",
+        hl_tgt_title: "Modo Tamaño Objetivo",
+        hl_tgt_desc: "Especifica el peso máximo deseado (ej. 5 MB para enviar por correo o WhatsApp) y el motor calculará la escala y calidad ideal.",
+        fmt_sec_title: "Tres potentes motores en una sola app",
+        fmt_sec_sub: "Olvídate de buscar herramientas web con límites de tamaño o anuncios molestos.",
+        fmt_img_title: "Imágenes",
+        fmt_img_desc: "Compresión inteligente basada en ImageIO y CoreGraphics. Encuentra la máxima calidad visual manteniendo los perfiles de color y la transparencia alfa intactos.",
+        fmt_img_f1: "Conserva formato y canal alfa original",
+        fmt_img_f2: "Ajuste de calidad fina (Alta, Equilibrada, Reducida)",
+        fmt_img_f3: "Soporte nativo para fotos HEIC del iPhone",
+        stat_label: "Ahorro típico:",
+        fmt_img_stat: "hasta -70% a -90%",
+        fmt_vid_title: "Vídeos",
+        fmt_vid_desc: "Transcodificación por hardware con AVAssetReader y AVAssetWriter. Control preciso de bitrate con codificación H.264 para máxima compatibilidad con cualquier dispositivo.",
+        fmt_vid_f1: "Audio estéreo AAC de alta fidelidad",
+        fmt_vid_f2: "Escalado inteligente (1080p, 720p, 540p)",
+        fmt_vid_f3: "Estimación de bitrate exacto para tamaño objetivo",
+        fmt_vid_stat: "hasta -50% a -85%",
+        fmt_pdf_title: "Documentos PDF",
+        fmt_pdf_badge: "SafePDFCompressor Híbrido",
+        fmt_pdf_desc: "Nuevo motor en dos niveles: Nivel 1 con QuartzFilter para comprimir fotos incrustadas conservando texto 100% vectorial, y Nivel 2 adaptativo para documentos escaneados.",
+        fmt_pdf_f1: "Texto y tipografías siempre seleccionables",
+        fmt_pdf_f2: "Presupuesto dinámico de bytes por página",
+        fmt_pdf_f3: "Solución garantizada para PDFs pesados",
+        fmt_pdf_stat: "hasta -60% a -95%",
+        fnd_badge: "Acción Rápida de Finder",
+        fnd_title: "Comprime con un clic derecho sin abrir la app.",
+        fnd_desc: "Integrado directamente en el menú contextual de macOS. Selecciona uno o cientos de archivos en Finder, haz clic derecho y compresiónalos al instante.",
+        fnd_step1: "Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>\"Instalar Acción Rápida\"</em>.",
+        fnd_step2: "Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.",
+        fnd_step3: "Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!",
+        ctx_open: "Abrir",
+        ctx_openwith: "Abrir con…",
+        ctx_getinfo: "Obtener información",
+        ctx_rename: "Renombrar",
+        ctx_action: "⚡ Comprimir con Compresor",
+        ctx_quickactions: "Acciones rápidas ›",
+        ctx_trash: "Trasladar a la papelera",
+        cmp_title: "¿Por qué Compressor es diferente?",
+        cmp_sub: "Comparación con servicios online tradicionales y herramientas web.",
+        cmp_hint: "Desliza horizontalmente para ver la tabla completa",
+        th_feature: "Característica",
+        th_comp: "Compressor para Mac",
+        th_online: "Webs Online (iLovePDF, etc.)",
+        th_paid: "Herramientas de Pago",
+        row_priv_title: "Privacidad de tus datos",
+        row_priv_comp: "🔒 100% Local (Nunca salen de tu Mac)",
+        row_priv_online: "⚠️ Subida a servidores de terceros",
+        row_priv_paid: "Variable / Telemetría",
+        row_lim_title: "Límites de tamaño o archivos",
+        row_lim_comp: "✅ Sin límites (Gigas o miles de archivos)",
+        row_lim_online: "❌ Límites por archivo (ej. 25-50 MB)",
+        row_lim_paid: "✅ Ilimitado",
+        row_spd_title: "Velocidad de proceso",
+        row_spd_comp: "⚡ Instantáneo (Acelerado por GPU)",
+        row_spd_online: "🐢 Lento (Sujeto a tu velocidad de subida)",
+        row_spd_paid: "⚡ Rápido",
+        row_cst_title: "Coste",
+        row_cst_comp: "🎁 100% Gratis y Open Source",
+        row_cst_online: "❌ Suscripciones o colas de espera",
+        row_cst_paid: "❌ 40€ - 80€ / año",
+        row_off_title: "Funciona sin conexión (Offline)",
+        row_off_comp: "✅ Sí, en cualquier lugar",
+        row_off_online: "❌ Requiere conexión obligatoria",
+        row_off_paid: "✅ Sí",
+        row_fnd_title: "Integración con Finder",
+        row_fnd_comp: "✅ Clic derecho nativo",
+        row_fnd_online: "❌ No disponible",
+        row_fnd_paid: "⚠️ Requiere extensiones pesadas",
+        faq_title: "Preguntas Frecuentes",
+        faq_sub: "Todo lo que necesitas saber sobre instalación y funcionamiento.",
+        faq_q1: "¿Cómo instalo la aplicación desde el archivo .dmg?",
+        faq_a1: "Descarga el archivo <code>Compressor-1.2.dmg</code>, ábrelo con doble clic y arrastra el icono de <strong>Compressor</strong> a la carpeta <strong>Aplicaciones</strong>.",
+        faq_q2: "¿Qué hago si macOS muestra un aviso de desarrollador no identificado?",
+        faq_a2: "Al ser una app gratuita de código abierto sin licencia de pago corporativa de Apple, la primera vez que la abras haz <strong>clic derecho</strong> sobre Compressor en la carpeta Aplicaciones y pulsa en <strong>Abrir</strong>. O bien ve a <em>Ajustes del Sistema > Privacidad y seguridad</em> y haz clic en <em>\"Abrir igualmente\"</em>.",
+        faq_q3: "¿Modifica mis archivos originales?",
+        faq_a3: "Nunca. Los archivos originales permanecen intactos. Por defecto, Compressor crea una carpeta llamada <code>Comprimidos</code> al lado del archivo con el resultado optimizado. También puedes configurarlo para guardar junto al original o en cualquier carpeta que elijas.",
+        faq_q4: "¿Qué hace el programa si un archivo no se puede comprimir más?",
+        faq_a4: "El motor analiza el peso resultante. Si el archivo resultante no es estrictamente más pequeño que el original, lo descarta automáticamente y te muestra el estado <em>\"Sin mejora\"</em> para no hacerte perder tiempo ni calidad innecesaria.",
+        bnr_title: "Empieza a ahorrar espacio hoy mismo",
+        bnr_sub: "Descarga Compressor de forma gratuita y optimiza tus imágenes, vídeos y PDFs en segundos con total privacidad.",
+        bnr_btn: "Descargar Compressor para macOS",
+        bnr_req: "Requiere macOS 13 Ventura o posterior · Compatible con Apple Silicon e Intel",
+        ftr_repo: "Repositorio en GitHub",
+        ftr_rel: "Versiones (.DMG)",
+        ftr_iss: "Reportar un problema",
+        ftr_copy: "© 2026 Compressor para macOS · Código abierto bajo licencia MIT · 100% Local & Privado"
+      },
+      en: {
+        page_title: "Compressor for Mac — The Ultimate Native Image, Video & PDF Compressor",
+        meta_desc: "Compress images, videos, and PDFs on macOS with maximum quality, hardware acceleration, and 100% local privacy. No internet or subscriptions required.",
+        nav_features: "Features",
+        nav_formats: "Formats",
+        nav_finder: "Finder",
+        nav_comparison: "Comparison",
+        nav_faq: "FAQ",
+        badge_support: "macOS Ventura, Sonoma, Sequoia & Golden Gate · 100% Native Apple Silicon & Intel",
+        hero_title: "The ultimate compressor<br>crafted for your Mac.",
+        hero_sub: "Optimize images, videos, and PDF documents in a single clean, powerful, and private app. Everything is processed locally with hardware acceleration: your files never leave your device.",
+        btn_download: "Download for macOS (.dmg)",
+        btn_source: "Source Code (GitHub)",
+        meta_ver: "⚡ Version 1.2",
+        meta_telemetry: "🔒 Zero telemetry",
+        meta_finder: "📁 Integrated with Finder",
+        hl_priv_title: "100% Local & Private",
+        hl_priv_desc: "Your confidential photos, recordings, and contracts are never uploaded to the cloud. Zero external servers or tracking.",
+        hl_gpu_title: "GPU Acceleration",
+        hl_gpu_desc: "Leverages media engines on Apple Silicon and Intel QuickSync chips to encode at maximum speed.",
+        hl_prot_title: "Anti-Loss Protection",
+        hl_prot_desc: "Your original files are never altered or overwritten. If a compression doesn't reduce file size, it's discarded automatically.",
+        hl_tgt_title: "Target Size Mode",
+        hl_tgt_desc: "Set your desired file size limit (e.g. 5 MB for email or messaging) and the engine calculates the optimal scale and quality.",
+        fmt_sec_title: "Three powerful engines in a single app",
+        fmt_sec_sub: "No more searching for online web tools with upload limits and intrusive ads.",
+        fmt_img_title: "Images",
+        fmt_img_desc: "Intelligent compression powered by ImageIO and CoreGraphics. Preserves visual fidelity while keeping color profiles and alpha transparency untouched.",
+        fmt_img_f1: "Preserves original format and alpha channel",
+        fmt_img_f2: "Fine quality tuning (High, Balanced, Small)",
+        fmt_img_f3: "Native support for iPhone HEIC photos",
+        stat_label: "Typical savings:",
+        fmt_img_stat: "up to -70% to -90%",
+        fmt_vid_title: "Videos",
+        fmt_vid_desc: "Hardware transcoding via AVAssetReader and AVAssetWriter. Precise bitrate control with H.264 encoding for universal device playback.",
+        fmt_vid_f1: "High-fidelity AAC stereo audio",
+        fmt_vid_f2: "Smart downscaling (1080p, 720p, 540p)",
+        fmt_vid_f3: "Exact bitrate estimation for target file sizes",
+        fmt_vid_stat: "up to -50% to -85%",
+        fmt_pdf_title: "PDF Documents",
+        fmt_pdf_badge: "Hybrid SafePDFCompressor",
+        fmt_pdf_desc: "New dual-tier engine: Tier 1 with QuartzFilter recompresses embedded images preserving 100% vector text clarity, and Tier 2 adaptive rasterization for scanned files.",
+        fmt_pdf_f1: "Text and typography stay crisp & selectable",
+        fmt_pdf_f2: "Dynamic per-page byte budgeting",
+        fmt_pdf_f3: "Guaranteed reduction for heavy PDFs",
+        fmt_pdf_stat: "up to -60% to -95%",
+        fnd_badge: "Finder Quick Action",
+        fnd_title: "Compress with a right-click without opening the app.",
+        fnd_desc: "Integrated directly into macOS context menus. Select one or hundreds of files in Finder, right-click, and compress in an instant.",
+        fnd_step1: "Open <strong>Settings</strong> in Compressor (Cmd + ,) and click <em>\"Install Quick Action\"</em>.",
+        fnd_step2: "Right-click any image, video, or PDF in Finder.",
+        fnd_step3: "Choose <strong>Quick Actions > Compress with Compressor</strong>. That\'s it!",
+        ctx_open: "Open",
+        ctx_openwith: "Open with…",
+        ctx_getinfo: "Get Info",
+        ctx_rename: "Rename",
+        ctx_action: "⚡ Compress with Compressor",
+        ctx_quickactions: "Quick Actions ›",
+        ctx_trash: "Move to Trash",
+        cmp_title: "Why is Compressor different?",
+        cmp_sub: "Comparison with traditional online services and web tools.",
+        cmp_hint: "Swipe horizontally to view full table",
+        th_feature: "Feature",
+        th_comp: "Compressor for Mac",
+        th_online: "Online Services (iLovePDF, etc.)",
+        th_paid: "Paid Tools",
+        row_priv_title: "Data Privacy",
+        row_priv_comp: "🔒 100% Local (Never leaves your Mac)",
+        row_priv_online: "⚠️ Uploaded to third-party servers",
+        row_priv_paid: "Variable / Telemetry",
+        row_lim_title: "File or Size Limits",
+        row_lim_comp: "✅ No limits (Gigabytes or thousands of files)",
+        row_lim_online: "❌ File size caps (e.g. 25-50 MB)",
+        row_lim_paid: "✅ Unlimited",
+        row_spd_title: "Processing Speed",
+        row_spd_comp: "⚡ Instant (GPU Accelerated)",
+        row_spd_online: "🐢 Slow (Limited by upload speeds)",
+        row_spd_paid: "⚡ Fast",
+        row_cst_title: "Cost",
+        row_cst_comp: "🎁 100% Free & Open Source",
+        row_cst_online: "❌ Subscriptions or waiting queues",
+        row_cst_paid: "❌ $40 - $80 / year",
+        row_off_title: "Works Offline",
+        row_off_comp: "✅ Yes, anywhere anytime",
+        row_off_online: "❌ Strict internet connection required",
+        row_off_paid: "✅ Yes",
+        row_fnd_title: "Finder Integration",
+        row_fnd_comp: "✅ Native right-click action",
+        row_fnd_online: "❌ Not available",
+        row_fnd_paid: "⚠️ Requires heavy background extensions",
+        faq_title: "Frequently Asked Questions",
+        faq_sub: "Everything you need to know about installation and functionality.",
+        faq_q1: "How do I install the app from the .dmg file?",
+        faq_a1: "Download <code>Compressor-1.2.dmg</code>, double-click to open it, and drag the <strong>Compressor</strong> icon into your <strong>Applications</strong> folder.",
+        faq_q2: "What if macOS shows an unidentified developer warning?",
+        faq_a2: "Because this is a free open-source app distributed without Apple\'s paid corporate developer certificate, the first time you run it simply <strong>right-click</strong> Compressor in Applications and click <strong>Open</strong>. Or visit <em>System Settings > Privacy & Security</em> and select <em>\"Open Anyway\"</em>.",
+        faq_q3: "Does it modify my original files?",
+        faq_a3: "Never. Original files remain completely untouched. By default, Compressor saves optimized files inside a folder named <code>Comprimidos</code> (Compressed) next to the original. You can also configure it to save alongside the source or in any custom folder.",
+        faq_q4: "What happens if a file cannot be compressed any further?",
+        faq_a4: "The engine analyzes the output size. If the resulting file isn\'t strictly smaller than the original, it is discarded automatically and displays a <em>\"No improvement\"</em> status so you never waste quality or storage.",
+        bnr_title: "Start saving disk space today",
+        bnr_sub: "Download Compressor for free and optimize your images, videos, and PDFs in seconds with complete privacy.",
+        bnr_btn: "Download Compressor for macOS",
+        bnr_req: "Requires macOS 13 Ventura or later · Compatible with Apple Silicon and Intel",
+        ftr_repo: "GitHub Repository",
+        ftr_rel: "Releases (.DMG)",
+        ftr_iss: "Report an Issue",
+        ftr_copy: "© 2026 Compressor for macOS · Open source under MIT License · 100% Local & Private"
+      }
+    };
+
+    function setLanguage(lang) {
+      if (!i18nData[lang]) lang = 'es';
+      const dict = i18nData[lang];
+      document.documentElement.lang = lang;
+      
+      // Update Title & Meta
+      if (dict.page_title) document.title = dict.page_title;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc && dict.meta_desc) metaDesc.setAttribute('content', dict.meta_desc);
+
+      // Text elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // HTML elements
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key]) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      // Update switcher active states
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      localStorage.setItem('compressor_lang', lang);
+    }
+
+    // Attach click listeners to language buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const lang = btn.getAttribute('data-lang');
+        setLanguage(lang);
+      });
+    });
+
+    // Detect initial language
+    (function initLanguage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlLang = urlParams.get('lang');
+      const savedLang = localStorage.getItem('compressor_lang');
+      const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('en') ? 'en' : 'es';
+      
+      const initialLang = urlLang || savedLang || browserLang;
+      if (initialLang === 'en') {
+        setLanguage('en');
+      }
+    })();
+
   </script>
 
 </body>
