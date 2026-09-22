@@ -78,17 +78,12 @@ enum SafeImageCompressor {
     private static func encode(_ source: CGImageSource, type: CFString, quality: Double, maxDimension: Int, originalMax: Int) -> Data? {
         let data = NSMutableData(); guard let destination = CGImageDestinationCreateWithData(data, type, 1, nil) else { return nil }
         let properties: [CFString: Any] = [kCGImageDestinationLossyCompressionQuality: quality]
-        let image: CGImage?
-        if maxDimension < originalMax {
-            let opts: [CFString: Any] = [
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                kCGImageSourceThumbnailMaxPixelSize: maxDimension
-            ]
-            image = CGImageSourceCreateThumbnailAtIndex(source, 0, opts as CFDictionary)
-        } else {
-            image = CGImageSourceCreateImageAtIndex(source, 0, nil)
-        }
+        let opts: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxDimension
+        ]
+        let image = CGImageSourceCreateThumbnailAtIndex(source, 0, opts as CFDictionary)
         guard let validImage = image else { return nil }
         CGImageDestinationAddImage(destination, validImage, properties as CFDictionary)
         return CGImageDestinationFinalize(destination) ? data as Data : nil

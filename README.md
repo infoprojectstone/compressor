@@ -47,7 +47,7 @@
 * 📁 **Integración con Finder:** Comprime archivos o carpetas enteras con un solo clic derecho desde el menú contextual de Finder sin necesidad de abrir la aplicación previamente.
 * 🎯 **Doble Modo de Operación:**
   * **Modo Calidad:** Elige entre *Alta calidad*, *Equilibrado* o *Tamaño pequeño*.
-  * **Modo Tamaño Objetivo:** Define el peso máximo exacto deseado en megabytes (MB) (ideal para correos, WhatsApp o plataformas con límites estrictos de subida).
+  * **Modo Tamaño Objetivo:** Define el peso máximo aproximado deseado en megabytes (MB) (ideal para correos, WhatsApp o plataformas con límites estrictos de subida).
 
 ---
 

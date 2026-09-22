@@ -21,6 +21,18 @@ enum ContentKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
     var accent: Color { switch self { case .image: .purple; case .video: .pink; case .pdf: .orange } }
+
+    static func detect(for url: URL) -> ContentKind? {
+        let ext = url.pathExtension.lowercased()
+        if ContentKind.image.extensions.contains(ext) { return .image }
+        if ContentKind.video.extensions.contains(ext) { return .video }
+        if ContentKind.pdf.extensions.contains(ext) { return .pdf }
+        return nil
+    }
+
+    static var allSupportedExtensions: Set<String> {
+        ContentKind.image.extensions.union(ContentKind.video.extensions).union(ContentKind.pdf.extensions)
+    }
 }
 
 enum JobStatus: Equatable { case waiting, processing, done, skipped, failed(String)
@@ -38,7 +50,15 @@ enum OutputDestination: String, CaseIterable, Identifiable, Sendable {
     var id: String { rawValue }
 }
 
-struct Job: Identifiable { let id = UUID(); let url: URL; let originalBytes: Int64; var finalBytes: Int64?; var result: URL?; var status: JobStatus = .waiting }
+struct Job: Identifiable {
+    let id = UUID()
+    let url: URL
+    let kind: ContentKind
+    let originalBytes: Int64
+    var finalBytes: Int64?
+    var result: URL?
+    var status: JobStatus = .waiting
+}
 struct CompressionConfig: Sendable {
     let kind: ContentKind
     let mode: CompressionMode
@@ -90,15 +110,20 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         accumulatedSeconds = 0
         lastResumeDate = nil
     }
-    func add(_ urls: [URL]) {
+    func add(_ urls: [URL], allowMixed: Bool = false) {
         guard !isWorking else { return }
         showTimer = false
         elapsedText = "0:00"
         accumulatedSeconds = 0
         lastResumeDate = nil
         let existing = Set(jobs.map { $0.url.standardizedFileURL })
-        let files = discover(urls).filter { !existing.contains($0.standardizedFileURL) }
-        jobs += files.map { Job(url: $0, originalBytes: Self.size($0)) }
+        let allowedKinds: Set<ContentKind>? = allowMixed ? nil : [kind]
+        let files = discover(urls, allowedKinds: allowedKinds).filter { !existing.contains($0.standardizedFileURL) }
+        let newJobs = files.compactMap { file -> Job? in
+            guard let itemKind = ContentKind.detect(for: file) else { return nil }
+            return Job(url: file, kind: itemKind, originalBytes: Self.size(file))
+        }
+        jobs += newJobs
         message = files.isEmpty ? tr("No se encontraron archivos compatibles nuevos.", "No new compatible files were found.") : nil
     }
     func handleIncoming(_ urls: [URL]) {
@@ -135,7 +160,7 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
             self.kind = .image
         }
 
-        self.add(urls)
+        self.add(urls, allowMixed: true)
         NSApp.activate(ignoringOtherApps: true)
         if let window = NSApp.windows.first(where: { $0.canBecomeMain }) ?? NSApp.windows.first {
             window.makeKeyAndOrderFront(nil)
@@ -164,22 +189,32 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         let control = CompressionControl(); compressionControl = control
         startTimer(); DockProgress.update(0)
         for i in jobs.indices { jobs[i].status = .waiting; jobs[i].finalBytes=nil; jobs[i].result=nil }
-        let config = CompressionConfig(kind:kind, mode:compressionMode, quality:compressionQuality, targetSizeMB:targetSizeMB, videoFormat:videoFormat, videoResolution:videoResolution, outputDestination:outputDestination, customOutputFolder:customFolder)
         Task { @MainActor in
             let accessedCustomFolder = customFolder?.startAccessingSecurityScopedResource() ?? false
             defer { if accessedCustomFolder { customFolder?.stopAccessingSecurityScopedResource() } }
             for index in jobs.indices {
                 jobs[index].status = .processing
                 let input = jobs[index].url; let original = jobs[index].originalBytes
+                let itemKind = jobs[index].kind
+                let itemConfig = CompressionConfig(
+                    kind: itemKind,
+                    mode: compressionMode,
+                    quality: compressionQuality,
+                    targetSizeMB: targetSizeMB,
+                    videoFormat: videoFormat,
+                    videoResolution: videoResolution,
+                    outputDestination: outputDestination,
+                    customOutputFolder: customFolder
+                )
                 do {
                     let videoDuration: Double?
-                    if config.kind == .video && config.mode == .targetSize {
+                    if itemKind == .video && itemConfig.mode == .targetSize {
                         videoDuration = CMTimeGetSeconds(try await AVURLAsset(url:input).load(.duration))
                     } else {
                         videoDuration = nil
                     }
                     let output = try await Task.detached(priority: .userInitiated) {
-                        try await Self.compress(input, config:config, videoDuration:videoDuration, control:control)
+                        try await Self.compress(input, config:itemConfig, videoDuration:videoDuration, control:control)
                     }.value
                     let finalBytes = Self.size(output)
                     jobs[index].finalBytes = finalBytes
@@ -193,8 +228,9 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
             isWorking=false; DockProgress.clear(); message = tr("Terminado. Los originales no se han modificado.", "Finished. The original files were not modified.")
         }
     }
-    private func discover(_ urls: [URL]) -> [URL] {
+    private func discover(_ urls: [URL], allowedKinds: Set<ContentKind>? = nil) -> [URL] {
         let fm = FileManager.default; var result = Set<URL>()
+        let targetExtensions = allowedKinds?.reduce(into: Set<String>()) { $0.formUnion($1.extensions) } ?? ContentKind.allSupportedExtensions
         for url in urls { var dir: ObjCBool=false; guard fm.fileExists(atPath:url.path,isDirectory:&dir) else { continue }
             if dir.boolValue, let e=fm.enumerator(at:url, includingPropertiesForKeys:[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey], options:[.skipsHiddenFiles,.skipsPackageDescendants]) {
                 while let f = e.nextObject() as? URL {
@@ -204,10 +240,10 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
                         continue
                     }
                     guard values?.isRegularFile == true, values?.isSymbolicLink != true else { continue }
-                    if kind.extensions.contains(f.pathExtension.lowercased()) { result.insert(f.standardizedFileURL) }
+                    if targetExtensions.contains(f.pathExtension.lowercased()) { result.insert(f.standardizedFileURL) }
                 }
             }
-            else if kind.extensions.contains(url.pathExtension.lowercased()) { result.insert(url.standardizedFileURL) }
+            else if targetExtensions.contains(url.pathExtension.lowercased()) { result.insert(url.standardizedFileURL) }
         }; return result.sorted { $0.path.localizedStandardCompare($1.path) == .orderedAscending }
     }
     nonisolated private static func size(_ url: URL) -> Int64 { (try? url.resourceValues(forKeys:[.fileSizeKey]).fileSize).map(Int64.init) ?? 0 }
@@ -316,7 +352,8 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         do {
             return try await transcodeVideoWithWriter(asset: asset, out: out, format: format, outputFileType: outputFileType, config: config, durationSeconds: durationSeconds, control: control)
         } catch {
-            return try await exportFallback(asset: asset, out: out, format: format, outputFileType: outputFileType, config: config)
+            try? FileManager.default.removeItem(at: out)
+            return try await exportFallback(asset: asset, out: out, format: format, outputFileType: outputFileType, config: config, durationSeconds: durationSeconds)
         }
     }
 
@@ -534,30 +571,58 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
         return out
     }
 
-    nonisolated private static func exportFallback(asset: AVURLAsset, out: URL, format: String, outputFileType: AVFileType, config: CompressionConfig) async throws -> URL {
-        let preset = switch config.quality {
-        case .high: AVAssetExportPreset1920x1080
-        case .balanced: AVAssetExportPreset1280x720
-        case .small: AVAssetExportPresetLowQuality
+    nonisolated private static func exportFallback(asset: AVURLAsset, out: URL, format: String, outputFileType: AVFileType, config: CompressionConfig, durationSeconds: Double) async throws -> URL {
+        try? FileManager.default.removeItem(at: out)
+
+        let preset: String
+        switch config.mode {
+        case .quality:
+            preset = switch config.quality {
+            case .high: AVAssetExportPreset1920x1080
+            case .balanced: AVAssetExportPreset1280x720
+            case .small: AVAssetExportPresetLowQuality
+            }
+        case .targetSize:
+            let totalBits = Double(config.targetSizeMB) * 8_000_000.0
+            let targetBitrate = totalBits / max(1.0, durationSeconds)
+            if targetBitrate < 1_200_000 {
+                preset = AVAssetExportPresetLowQuality
+            } else if targetBitrate < 2_800_000 {
+                preset = AVAssetExportPresetMediumQuality
+            } else if targetBitrate < 5_500_000 {
+                preset = AVAssetExportPreset1280x720
+            } else {
+                preset = AVAssetExportPreset1920x1080
+            }
         }
+
         guard let session = AVAssetExportSession(asset: asset, presetName: preset) else {
             throw NSError(domain:"Compressor", code:8, userInfo:[NSLocalizedDescriptionKey:tr("Formato de vídeo no compatible.", "Unsupported video format.")])
         }
         session.outputURL = out
         session.outputFileType = outputFileType
         session.shouldOptimizeForNetworkUse = true
+        if config.mode == .targetSize {
+            session.fileLengthLimit = Int64(config.targetSizeMB * 1024 * 1024)
+        }
+
         nonisolated(unsafe) let exportSession = session
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            exportSession.exportAsynchronously {
-                switch exportSession.status {
-                case .completed: continuation.resume()
-                case .failed: continuation.resume(throwing: exportSession.error ?? NSError(domain:"Compressor", code:9, userInfo:[NSLocalizedDescriptionKey:tr("Error durante la exportación.", "Error during export.")]))
-                case .cancelled: continuation.resume(throwing: CancellationError())
-                default: continuation.resume(throwing: NSError(domain:"Compressor", code:10, userInfo:[NSLocalizedDescriptionKey:tr("Exportación no completada.", "Export not completed.")]))
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                exportSession.exportAsynchronously {
+                    switch exportSession.status {
+                    case .completed: continuation.resume()
+                    case .failed: continuation.resume(throwing: exportSession.error ?? NSError(domain:"Compressor", code:9, userInfo:[NSLocalizedDescriptionKey:tr("Error durante la exportación.", "Error during export.")]))
+                    case .cancelled: continuation.resume(throwing: CancellationError())
+                    default: continuation.resume(throwing: NSError(domain:"Compressor", code:10, userInfo:[NSLocalizedDescriptionKey:tr("Exportación no completada.", "Export not completed.")]))
+                    }
                 }
             }
+            return out
+        } catch {
+            try? FileManager.default.removeItem(at: out)
+            throw error
         }
-        return out
     }
     nonisolated private static func compressPDF(_ url: URL, config: CompressionConfig, control: CompressionControl) throws -> URL {
         let folder = try outputDirectory(for: url, config: config)

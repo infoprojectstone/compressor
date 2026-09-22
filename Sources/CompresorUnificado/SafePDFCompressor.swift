@@ -69,8 +69,12 @@ enum SafePDFCompressor: Sendable {
             }
         }
 
-        // NIVEL 2: Rasterización adaptativa inteligente (para escaneos de fotos pesadas o si Nivel 1 no redujo lo suficiente)
-        if bestSize > targetBytes || bestSize >= Int64(Double(originalBytes) * 0.95) {
+        let containsText = hasSelectableText(doc: doc)
+
+        // NIVEL 2: Rasterización adaptativa inteligente.
+        // IMPORTANTE: Se omite si el documento contiene texto seleccionable para no destruir búsqueda, texto ni enlaces.
+        // Solo se utiliza en documentos que son escaneos puros (sin texto seleccionable).
+        if !containsText && (bestSize > targetBytes || bestSize >= Int64(Double(originalBytes) * 0.95)) {
             let rasterCandidate = tempFolder.appendingPathComponent("tier2_raster.pdf")
             let rasterSuccess = compressWithAdaptiveRasterization(
                 doc: doc,
@@ -281,6 +285,15 @@ enum SafePDFCompressor: Sendable {
 
         guard outputDoc.pageCount > 0 else { return false }
         return outputDoc.write(to: outURL)
+    }
+
+    private static func hasSelectableText(doc: PDFDocument) -> Bool {
+        for i in 0..<doc.pageCount {
+            if let str = doc.page(at: i)?.string, !str.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                return true
+            }
+        }
+        return false
     }
 
     private static func finalize(

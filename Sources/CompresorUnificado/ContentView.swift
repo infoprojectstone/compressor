@@ -34,7 +34,7 @@ struct ContentView: View {
     }
     private var emptyHelp: String { switch model.kind { case .image: t("JPG, PNG, WebP, HEIC y HEIF\nSolo se conserva el resultado si ocupa menos.","JPG, PNG, WebP, HEIC and HEIF\nThe result is kept only when it is smaller."); case .video: t("MP4, MOV y M4V\nProcesamiento nativo con aceleración por hardware.","MP4, MOV and M4V\nNative processing with hardware acceleration."); case .pdf: t("PDF individuales o carpetas completas\nOptimización nativa 100% local.","Individual PDFs or entire folders\n100% local native optimization.") } }
     private var queue: some View {
-        VStack(spacing:0) { if model.isWorking { VStack(alignment:.leading,spacing:7) { HStack { Text(t("Comprimiendo \(Int(model.progress * Double(model.jobs.count))) de \(model.jobs.count)","Compressing \(Int(model.progress * Double(model.jobs.count))) of \(model.jobs.count)")).fontWeight(.medium); Spacer(); Text("\(Int(model.progress * 100)) %").monospacedDigit().foregroundStyle(.secondary) }; ProgressView(value:model.progress).tint(model.kind.accent) }.padding(20) }; Table(model.jobs) { TableColumn(t("Archivo","File")) { job in VStack(alignment:.leading,spacing:3) { Text(job.url.lastPathComponent).lineLimit(1); if case .failed(let e) = job.status { Text(e).font(.caption).foregroundStyle(.red).lineLimit(1) } } }.width(min:250,ideal:360); TableColumn(t("Original","Original")) { Text(Format.bytes($0.originalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Final","Final")) { Text(Format.bytes($0.finalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Ahorro","Savings")) { job in Text(saving(job)).monospacedDigit().foregroundStyle(savingColor(job)) }.width(min:85,ideal:100); TableColumn(t("Estado","Status")) { job in Label(statusLabel(job.status),systemImage:job.status.icon).foregroundStyle(statusColor(job.status)) }.width(min:125,ideal:140) } }
+        VStack(spacing:0) { if model.isWorking { VStack(alignment:.leading,spacing:7) { HStack { Text(t("Comprimiendo \(Int(model.progress * Double(model.jobs.count))) de \(model.jobs.count)","Compressing \(Int(model.progress * Double(model.jobs.count))) of \(model.jobs.count)")).fontWeight(.medium); Spacer(); Text("\(Int(model.progress * 100)) %").monospacedDigit().foregroundStyle(.secondary) }; ProgressView(value:model.progress).tint(model.kind.accent) }.padding(20) }; Table(model.jobs) { TableColumn(t("Archivo","File")) { job in HStack(spacing:8) { Image(systemName:job.kind.icon).foregroundStyle(job.kind.accent); VStack(alignment:.leading,spacing:3) { Text(job.url.lastPathComponent).lineLimit(1); if case .failed(let e) = job.status { Text(e).font(.caption).foregroundStyle(.red).lineLimit(1) } } } }.width(min:250,ideal:360); TableColumn(t("Original","Original")) { Text(Format.bytes($0.originalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Final","Final")) { Text(Format.bytes($0.finalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Ahorro","Savings")) { job in Text(saving(job)).monospacedDigit().foregroundStyle(savingColor(job)) }.width(min:85,ideal:100); TableColumn(t("Estado","Status")) { job in Label(statusLabel(job.status),systemImage:job.status.icon).foregroundStyle(statusColor(job.status)) }.width(min:125,ideal:140) } }
     }
     private var footer: some View {
         VStack(spacing: 16) {
@@ -107,7 +107,7 @@ struct ContentView: View {
             .frame(height: 48)
 
             // Opciones de vídeo
-            if model.kind == .video {
+            if model.kind == .video || model.jobs.contains(where: { $0.kind == .video }) {
                 HStack(spacing: 18) {
                     Picker(t("Formato", "Format"), selection: $model.videoFormat) {
                         Text("MP4").tag("mp4")
@@ -134,7 +134,7 @@ struct ContentView: View {
     private func t(_ es:String,_ en:String) -> String { tr(es,en,language:language) }
     private func kindTitle(_ kind:ContentKind) -> String { switch kind { case .image:t("Imágenes","Images"); case .video:t("Vídeos","Videos"); case .pdf:"PDF" } }
     private func statusLabel(_ status:JobStatus) -> String { switch status { case .waiting:t("Pendiente","Waiting"); case .processing:t("Procesando…","Processing…"); case .done:t("Comprimido","Compressed"); case .skipped:t("Sin mejora","No improvement"); case .failed:t("Error","Error") } }
-    private func load(_ providers:[NSItemProvider]) { for p in providers { p.loadItem(forTypeIdentifier:UTType.fileURL.identifier,options:nil) { v,_ in let url=(v as? Data).flatMap { URL(dataRepresentation:$0,relativeTo:nil) } ?? (v as? URL); if let url { DispatchQueue.main.async { model.add([url]) } } } } }
+    private func load(_ providers:[NSItemProvider]) { for p in providers { p.loadItem(forTypeIdentifier:UTType.fileURL.identifier,options:nil) { v,_ in let url=(v as? Data).flatMap { URL(dataRepresentation:$0,relativeTo:nil) } ?? (v as? URL); if let url { DispatchQueue.main.async { model.add([url], allowMixed: true) } } } } }
 }
 
 struct AppMark: View {
