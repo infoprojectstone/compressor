@@ -7,7 +7,7 @@
   **El compresor nativo definitivo de Imágenes, Vídeo y PDF para tu Mac.**  
   *100% Local · Aceleración por Hardware · Sin dependencias externas · Privacidad absoluta*
 
-  [![macOS 13+](https://img.shields.io/badge/macOS-13%2B%20Ventura%20%7C%20Sonoma%20%7C%20Sequoia%20%7C%20Golden%20Gate-007AFF?style=flat-square&logo=apple&logoColor=white)](https://github.com/infoprojectstone/compressor)
+  [![macOS 14+](https://img.shields.io/badge/macOS-Golden%20Gate%20%7C%20Sequoia%20%7C%20Sonoma-007AFF?style=flat-square&logo=apple&logoColor=white)](https://github.com/infoprojectstone/compressor)
   [![Swift 6.0](https://img.shields.io/badge/Swift-6.0-F05138?style=flat-square&logo=swift&logoColor=white)](https://swift.org)
   [![Architecture](https://img.shields.io/badge/Arch-Apple%20Silicon%20%7C%20Intel-000000?style=flat-square&logo=apple)](https://github.com/infoprojectstone/compressor)
   [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
