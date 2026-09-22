@@ -32,7 +32,7 @@
 
   <br /><br />
 
-  <img src="docs/assets/app_screenshot.png" width="920" alt="Compressor on macOS" />
+  <img src="docs/assets/app_screenshot_en.png" width="920" alt="Compressor on macOS" />
 
 </div>
 

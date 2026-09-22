@@ -1061,7 +1061,7 @@
 
       <!-- Mockup Window -->
       <div class="mockup-wrapper">
-        <img src="assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
+        <img id="mockupImg" src="assets/app_screenshot_en.png" alt="Compressor Interface on macOS" class="mockup-img">
       </div>
     </div>
   </header>
@@ -1684,6 +1684,18 @@
         }
       });
 
+      // Update screenshot depending on language
+      const mockupImg = document.getElementById('mockupImg');
+      if (mockupImg) {
+        if (lang === 'en') {
+          mockupImg.src = 'assets/app_screenshot_en.png';
+          mockupImg.alt = 'Compressor Interface on macOS';
+        } else {
+          mockupImg.src = 'assets/app_screenshot.png';
+          mockupImg.alt = 'Compressor Interface en macOS';
+        }
+      }
+
       // Update switcher active states
       document.querySelectorAll('.lang-btn').forEach(btn => {
         if (btn.getAttribute('data-lang') === lang) {
@@ -1709,7 +1721,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const urlLang = urlParams.get('lang');
       const savedLang = localStorage.getItem('compressor_lang');
-      const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('en') ? 'en' : 'es';
+      const browserLang = 'en';
       
       const initialLang = urlLang || savedLang || browserLang;
       if (initialLang === 'en') {

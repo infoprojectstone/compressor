@@ -1061,7 +1061,7 @@
 
       <!-- Mockup Window -->
       <div class="mockup-wrapper">
-        <img src="assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
+        <img id="mockupImg" src="assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
       </div>
     </div>
   </header>
@@ -1683,6 +1683,18 @@
           el.innerHTML = dict[key];
         }
       });
+
+      // Update screenshot depending on language
+      const mockupImg = document.getElementById('mockupImg');
+      if (mockupImg) {
+        if (lang === 'en') {
+          mockupImg.src = 'assets/app_screenshot_en.png';
+          mockupImg.alt = 'Compressor Interface on macOS';
+        } else {
+          mockupImg.src = 'assets/app_screenshot.png';
+          mockupImg.alt = 'Compressor Interface en macOS';
+        }
+      }
 
       // Update switcher active states
       document.querySelectorAll('.lang-btn').forEach(btn => {
