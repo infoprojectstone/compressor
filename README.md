@@ -9,7 +9,7 @@
 
   [![macOS 14+](https://img.shields.io/badge/macOS-Golden%20Gate%20%7C%20Sequoia%20%7C%20Sonoma-007AFF?style=flat-square&logo=apple&logoColor=white)](https://github.com/infoprojectstone/compressor)
   [![Swift 6.0](https://img.shields.io/badge/Swift-6.0-F05138?style=flat-square&logo=swift&logoColor=white)](https://swift.org)
-  [![Architecture](https://img.shields.io/badge/Arch-Apple%20Silicon%20%7C%20Intel-000000?style=flat-square&logo=apple)](https://github.com/infoprojectstone/compressor)
+  [![Architecture](https://img.shields.io/badge/Arch-Apple%20Silicon-000000?style=flat-square&logo=apple)](https://github.com/infoprojectstone/compressor)
   [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
   [![Website](https://img.shields.io/badge/Web-GitHub%20Pages-2563EB?style=flat-square&logo=githubpages&logoColor=white)](https://infoprojectstone.github.io/compressor/)
 
@@ -33,7 +33,7 @@
 ## ✨ Características Principales
 
 * 🔒 **Local y Seguro:** Tus fotografías personales, vídeos confidenciales y documentos nunca tocan la nube ni servidores de terceros. Cero telemetría y sin requerir conexión a internet.
-* ⚡ **Aceleración por GPU:** Codificación nativa de vídeo y procesamiento gráfico ultra-rápido mediante `AVFoundation`, `CoreGraphics` e `ImageIO`, optimizado para chips Apple Silicon e Intel QuickSync.
+* ⚡ **Aceleración por GPU:** Codificación nativa de vídeo y procesamiento gráfico ultra-rápido mediante `AVFoundation`, `CoreGraphics` e `ImageIO`, optimizado para chips Apple Silicon.
 * 🛡️ **Garantía Anti-Pérdida:** Los archivos originales nunca se sobrescriben. Y si una compresión no consigue reducir el peso del archivo, el sistema lo descarta automáticamente avisándote con el estado *"Sin mejora"*.
 * 📁 **Integración con Finder:** Comprime archivos o carpetas enteras con un solo clic derecho desde el menú contextual de Finder sin necesidad de abrir la aplicación previamente.
 * 🎯 **Doble Modo de Operación:**
