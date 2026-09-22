@@ -105,9 +105,3 @@ Requisitos: macOS 13.0 o superior, Xcode Command Line Tools (`xcode-select --ins
   ```bash
   zsh scripts/create-dmg.sh
   ```
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la licencia [MIT](LICENSE) — siéntete libre de usarlo, modificarlo y compartirlo.
