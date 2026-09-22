@@ -55,7 +55,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>open -a &quot;Compressor&quot; &quot;$@&quot;</string>
+					<string>open -b &quot;local.compresor.unificado&quot; &quot;$@&quot; 2&gt;/dev/null || open -a &quot;Compressor&quot; &quot;$@&quot;</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

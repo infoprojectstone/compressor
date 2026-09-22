@@ -567,6 +567,16 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Enforce single instance: if another instance is already running, activate it and terminate self
+        if let bundleID = Bundle.main.bundleIdentifier {
+            let instances = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
+            if let existing = instances.first(where: { $0.processIdentifier != ProcessInfo.processInfo.processIdentifier }) {
+                existing.activate(options: [.activateIgnoringOtherApps])
+                NSApp.terminate(nil)
+                return
+            }
+        }
+
         if let url = Bundle.main.url(forResource:"AppIconSource", withExtension:"png"),
            let icon = NSImage(contentsOf:url) {
             NSApp.applicationIconImage = icon
@@ -579,15 +589,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag {
+            if let window = sender.windows.first(where: { $0.canBecomeMain }) ?? sender.windows.first {
+                window.makeKeyAndOrderFront(self)
+            }
+        }
+        return true
+    }
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }
 
 @main struct CompresorApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
-        WindowGroup { ContentView().frame(minWidth:850,minHeight:620) }
+        Window("Compressor", id: "main") { ContentView().frame(minWidth:850,minHeight:620) }
             .windowStyle(.hiddenTitleBar)
             .defaultSize(width:1020,height:720)
+            .commands {
+                CommandGroup(replacing: .newItem) { }
+            }
         Settings { SettingsView() }
     }
 }
