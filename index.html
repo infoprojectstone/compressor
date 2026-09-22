@@ -282,52 +282,18 @@
     /* App Showcase Frame */
     .mockup-wrapper {
       position: relative;
-      margin: 0 auto;
-      max-width: 1024px;
-      perspective: 1000px;
-    }
-    .mockup-frame {
-      background: #1e1e24;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 30px 100px -20px rgba(0, 0, 0, 0.8), 0 0 40px -10px var(--accent-glow);
+      margin: 20px auto 0;
+      max-width: 980px;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .mockup-frame:hover {
+    .mockup-wrapper:hover {
       transform: translateY(-4px);
     }
-    .mockup-header {
-      background: #16161c;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .window-controls {
-      display: flex;
-      gap: 8px;
-    }
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-    .window-title {
-      flex: 1;
-      text-align: center;
-      font-size: 0.85rem;
-      color: #94a3b8;
-      font-weight: 500;
-      margin-right: 60px;
-    }
-    .mockup-frame img {
+    .mockup-img {
       width: 100%;
       height: auto;
       display: block;
+      filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 35px var(--accent-glow));
     }
 
     /* Highlights Bar */
@@ -983,17 +949,7 @@
 
       <!-- Mockup Window -->
       <div class="mockup-wrapper">
-        <div class="mockup-frame">
-          <div class="mockup-header">
-            <div class="window-controls">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
-            <div class="window-title">Compressor — macOS</div>
-          </div>
-          <img src="assets/app_screenshot.png" alt="Compressor Interface en macOS">
-        </div>
+        <img src="assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
       </div>
     </div>
   </header>

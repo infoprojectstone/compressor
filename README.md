@@ -24,7 +24,7 @@
 
   <br /><br />
 
-  <img src="docs/assets/app_screenshot.png" width="920" alt="Compressor en macOS" style="border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);" />
+  <img src="docs/assets/app_screenshot.png" width="920" alt="Compressor en macOS" />
 
 </div>
 
