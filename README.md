@@ -15,12 +15,16 @@
   [![Swift 6.0](https://img.shields.io/badge/Swift-6.0-F05138?style=flat-square&logo=swift&logoColor=white)](https://swift.org)
   [![Architecture](https://img.shields.io/badge/Arch-Apple%20Silicon-000000?style=flat-square&logo=apple)](https://github.com/infoprojectstone/compressor)
   [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+  [![Ko-fi](https://img.shields.io/badge/Ko--fi-Apoyar-FF5E5B?style=flat-square&logo=kofi&logoColor=white)](https://ko-fi.com/infofprojectstone)
   [![Website](https://img.shields.io/badge/Web-GitHub%20Pages-2563EB?style=flat-square&logo=githubpages&logoColor=white)](https://infoprojectstone.github.io/compressor/)
 
   <br />
 
   <a href="https://github.com/infoprojectstone/compressor/releases">
     <img src="https://img.shields.io/badge/Descargar%20Instalador-.DMG-2563eb?style=for-the-badge&logo=apple&logoColor=white" alt="Descargar DMG" />
+  </a>
+  <a href="https://ko-fi.com/infofprojectstone">
+    <img src="https://img.shields.io/badge/Invítame%20a%20un%20café-Ko--fi-ff5e5b?style=for-the-badge&logo=kofi&logoColor=white" alt="Apoyar en Ko-fi" />
   </a>
   <a href="https://infoprojectstone.github.io/compressor/">
     <img src="https://img.shields.io/badge/Visitar%20Sitio%20Web-Página%20Oficial-10b981?style=for-the-badge&logo=safari&logoColor=white" alt="Sitio Web" />
@@ -36,6 +40,7 @@
 
 ## ✨ Características Principales
 
+* ⏱️ **Diseñado para Ahorrar Tiempo:** Sin colas de subida en la nube ni interfaces confusas. Arrastra archivos, elige el peso que necesitas y comprime en 2 segundos.
 * 🔒 **Local y Seguro:** Tus fotografías personales, vídeos confidenciales y documentos nunca tocan la nube ni servidores de terceros. Cero telemetría y sin requerir conexión a internet.
 * ⚡ **Aceleración por GPU:** Codificación nativa de vídeo y procesamiento gráfico ultra-rápido mediante `AVFoundation`, `CoreGraphics` e `ImageIO`, optimizado para chips Apple Silicon.
 * 🛡️ **Garantía Anti-Pérdida:** Los archivos originales nunca se sobrescriben. Y si una compresión no consigue reducir el peso del archivo, el sistema lo descarta automáticamente avisándote con el estado *"Sin mejora"*.
@@ -109,3 +114,11 @@ Requisitos: macOS 13.0 o superior, Xcode Command Line Tools (`xcode-select --ins
   ```bash
   zsh scripts/create-dmg.sh
   ```
+
+---
+
+## ☕ Apoya el Proyecto
+
+Compressor es una herramienta independiente y gratuita. Si la aplicación te ha **ahorrado tiempo** o te ha sacado de un apuro con un archivo pesado, puedes apoyar su desarrollo y mantenimiento continuo invitándome a un café:
+
+👉 **[Invítame a un café en Ko-fi (ko-fi.com/infofprojectstone)](https://ko-fi.com/infofprojectstone)**
