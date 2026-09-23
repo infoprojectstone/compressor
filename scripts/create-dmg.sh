@@ -29,4 +29,5 @@ else
 fi
 
 echo "DMG creado en: $DMG_PATH"
-ls -lh "$DMG_PATH"
+cp "$DMG_PATH" "$BUILD_DIR/Compressor.dmg"
+ls -lh "$DMG_PATH" "$BUILD_DIR/Compressor.dmg"

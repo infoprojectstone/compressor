@@ -7,10 +7,10 @@
   <meta name="description" content="Comprime imágenes, vídeos y PDFs en macOS con máxima calidad, aceleración por hardware y privacidad local. Sin internet ni suscripciones.">
   <meta property="og:title" content="Compressor para Mac">
   <meta property="og:description" content="El compresor nativo definitivo de Imágenes, Vídeo y PDF para macOS. Rápido, local y seguro.">
-  <meta property="og:image" content="docs/assets/app_icon.png">
+  <meta property="og:image" content="assets/app_icon.png">
   <meta property="og:type" content="website">
-  <link rel="icon" type="image/svg+xml" href="docs/assets/app_icon.svg">
-  <link rel="apple-touch-icon" href="docs/assets/app_icon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/app_icon.svg">
+  <link rel="apple-touch-icon" href="assets/app_icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1564,7 +1564,7 @@
   <nav>
     <div class="nav-container">
       <a href="#" class="brand">
-        <img src="docs/assets/app_icon.png" alt="Compressor Icon">
+        <img src="assets/app_icon.png" alt="Compressor Icon">
         <span>Compressor</span>
       </a>
       <ul class="nav-links" id="navLinks">
@@ -1617,7 +1617,7 @@
       </p>
 
       <div class="hero-actions">
-        <a href="https://github.com/infoprojectstone/compressor/releases" class="btn-primary" target="_blank">
+        <a href="https://github.com/infoprojectstone/compressor/releases/latest/download/Compressor.dmg" class="btn-primary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="btn_download">Descargar para macOS (.dmg)</span>
         </a>
@@ -1637,7 +1637,7 @@
 
       <!-- Mockup Window -->
       <div class="mockup-wrapper">
-        <img id="mockupImg" src="docs/assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
+        <img id="mockupImg" src="assets/app_screenshot.png" alt="Compressor Interface en macOS" class="mockup-img">
       </div>
     </div>
   </header>
@@ -2007,7 +2007,7 @@
     <div class="download-banner">
       <h2 data-i18n="bnr_title">Empieza a ahorrar espacio hoy mismo</h2>
       <p data-i18n="bnr_sub">Descarga Compressor de forma gratuita y optimiza tus imágenes, vídeos y PDFs en segundos con total privacidad.</p>
-      <a href="https://github.com/infoprojectstone/compressor/releases" class="btn-primary" target="_blank" style="font-size:1.15rem; padding:16px 36px;">
+      <a href="https://github.com/infoprojectstone/compressor/releases/latest/download/Compressor.dmg" class="btn-primary" style="font-size:1.15rem; padding:16px 36px;">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span data-i18n="bnr_btn">Descargar Compressor para macOS</span>
       </a>
@@ -2384,10 +2384,10 @@
       const mockupImg = document.getElementById('mockupImg');
       if (mockupImg) {
         if (lang === 'en') {
-          mockupImg.src = 'docs/assets/app_screenshot_en.png';
+          mockupImg.src = 'assets/app_screenshot_en.png';
           mockupImg.alt = 'Compressor Interface on macOS';
         } else {
-          mockupImg.src = 'docs/assets/app_screenshot.png';
+          mockupImg.src = 'assets/app_screenshot.png';
           mockupImg.alt = 'Compressor Interface en macOS';
         }
       }
