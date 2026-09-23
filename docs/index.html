@@ -424,25 +424,38 @@
     }
     .theme-slider .icon-sun,
     .theme-slider .icon-moon {
-      font-size: 13px;
-      line-height: 1;
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       z-index: 2;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
       pointer-events: none;
     }
+    .theme-slider .icon-sun svg,
+    .theme-slider .icon-moon svg {
+      width: 13px;
+      height: 13px;
+      display: block;
+    }
     .theme-slider .icon-moon {
+      color: #ffffff;
       opacity: 1;
       transform: scale(1);
     }
     .theme-slider .icon-sun {
-      opacity: 0.35;
+      color: #94a3b8;
+      opacity: 0.4;
       transform: scale(0.85);
     }
     [data-theme="light"] .theme-slider .icon-moon {
-      opacity: 0.35;
+      color: #94a3b8;
+      opacity: 0.4;
       transform: scale(0.85);
     }
     [data-theme="light"] .theme-slider .icon-sun {
+      color: #b45309;
       opacity: 1;
       transform: scale(1);
     }
@@ -1228,7 +1241,13 @@
       }
       .theme-slider .icon-sun,
       .theme-slider .icon-moon {
-        font-size: 11px;
+        width: 12px;
+        height: 12px;
+      }
+      .theme-slider .icon-sun svg,
+      .theme-slider .icon-moon svg {
+        width: 11px;
+        height: 11px;
       }
       .nav-cta, .nav-kofi {
         padding: 6px 9px;
@@ -1273,8 +1292,8 @@
         </div>
         <div class="theme-toggle-wrap">
           <div class="theme-slider" id="themeSlider" role="button" tabindex="0" aria-label="Cambiar modo oscuro / claro" title="Cambiar modo oscuro / claro">
-            <span class="icon-moon" aria-hidden="true">🌙</span>
-            <span class="icon-sun" aria-hidden="true">☀️</span>
+            <span class="icon-moon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+            <span class="icon-sun" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
             <div class="theme-slider-thumb"></div>
           </div>
         </div>
