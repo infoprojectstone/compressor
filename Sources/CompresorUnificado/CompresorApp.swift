@@ -88,6 +88,7 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
     @Published var videoResolution = "Auto (máx. 1080p)"
     @Published var elapsedText = "0:00"
     @Published var isPaused = false
+    @Published var selectedJobIDs: Set<UUID> = []
     @Published var showTimer = false
     private var accumulatedSeconds: TimeInterval = 0
     private var lastResumeDate: Date?
@@ -103,12 +104,29 @@ enum Format { static func bytes(_ n: Int64?) -> String { guard let n else { retu
     func clear() {
         guard !isWorking else { return }
         jobs = []
+        selectedJobIDs = []
         progress = 0
         message = nil
         showTimer = false
         elapsedText = "0:00"
         accumulatedSeconds = 0
         lastResumeDate = nil
+    }
+    func remove(id: UUID) {
+        guard !isWorking else { return }
+        jobs.removeAll { $0.id == id }
+        selectedJobIDs.remove(id)
+        if jobs.isEmpty {
+            clear()
+        }
+    }
+    func remove(ids: Set<UUID>) {
+        guard !isWorking else { return }
+        jobs.removeAll { ids.contains($0.id) }
+        selectedJobIDs.subtract(ids)
+        if jobs.isEmpty {
+            clear()
+        }
     }
     func add(_ urls: [URL], allowMixed: Bool = false) {
         guard !isWorking else { return }

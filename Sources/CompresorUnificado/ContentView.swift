@@ -32,9 +32,85 @@ struct ContentView: View {
     private var empty: some View {
         VStack(spacing:16) { Spacer(); Image(systemName:model.dropTargeted ? "arrow.down.circle.fill" : model.kind.icon).font(.system(size:68,weight:.light)).foregroundStyle(model.dropTargeted ? model.kind.accent : .secondary); Text(model.dropTargeted ? t("Suelta los archivos aquí","Drop files here") : t("Arrastra \(kindTitle(model.kind).lowercased()) aquí","Drag \(kindTitle(model.kind).lowercased()) here")).font(.title2.weight(.semibold)); Text(emptyHelp).multilineTextAlignment(.center).foregroundStyle(.secondary); HStack { Button(t("Seleccionar archivos…","Select files…")) { model.chooseFiles() }.buttonStyle(.borderedProminent); Button(t("Seleccionar carpeta…","Select folder…")) { model.chooseFolder() } }; Spacer() }.frame(maxWidth:.infinity).background(model.dropTargeted ? model.kind.accent.opacity(0.07) : .clear)
     }
-    private var emptyHelp: String { switch model.kind { case .image: t("JPG, PNG, WebP, HEIC y HEIF\nSolo se conserva el resultado si ocupa menos.","JPG, PNG, WebP, HEIC and HEIF\nThe result is kept only when it is smaller."); case .video: t("MP4, MOV y M4V\nProcesamiento nativo con aceleración por hardware.","MP4, MOV and M4V\nNative processing with hardware acceleration."); case .pdf: t("PDF individuales o carpetas completas\nOptimización nativa 100% local.","Individual PDFs or entire folders\n100% local native optimization.") } }
+    private var emptyHelp: String { switch model.kind { case .image: t("JPG, PNG, WebP, HEIC y HEIF\nSolo se conserva el resultado si ocupa menos.","JPG, PNG, WebP, HEIC and HEIF\nThe result is kept only when it is smaller."); case .video: t("MP4, MOV y M4V\nProcesamiento nativo con aceleración por hardware.","MP4, MOV and M4V\nNative processing with hardware acceleration."); case .pdf: t("PDF individuales o carpetas completas\nOptimización nativa local.","Individual PDFs or entire folders\nNative local optimization.") } }
     private var queue: some View {
-        VStack(spacing:0) { if model.isWorking { VStack(alignment:.leading,spacing:7) { HStack { Text(t("Comprimiendo \(Int(model.progress * Double(model.jobs.count))) de \(model.jobs.count)","Compressing \(Int(model.progress * Double(model.jobs.count))) of \(model.jobs.count)")).fontWeight(.medium); Spacer(); Text("\(Int(model.progress * 100)) %").monospacedDigit().foregroundStyle(.secondary) }; ProgressView(value:model.progress).tint(model.kind.accent) }.padding(20) }; Table(model.jobs) { TableColumn(t("Archivo","File")) { job in HStack(spacing:8) { Image(systemName:job.kind.icon).foregroundStyle(job.kind.accent); VStack(alignment:.leading,spacing:3) { Text(job.url.lastPathComponent).lineLimit(1); if case .failed(let e) = job.status { Text(e).font(.caption).foregroundStyle(.red).lineLimit(1) } } } }.width(min:250,ideal:360); TableColumn(t("Original","Original")) { Text(Format.bytes($0.originalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Final","Final")) { Text(Format.bytes($0.finalBytes)).monospacedDigit() }.width(min:95,ideal:110); TableColumn(t("Ahorro","Savings")) { job in Text(saving(job)).monospacedDigit().foregroundStyle(savingColor(job)) }.width(min:85,ideal:100); TableColumn(t("Estado","Status")) { job in Label(statusLabel(job.status),systemImage:job.status.icon).foregroundStyle(statusColor(job.status)) }.width(min:125,ideal:140) } }
+        VStack(spacing: 0) {
+            if model.isWorking {
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack {
+                        Text(t("Comprimiendo \(Int(model.progress * Double(model.jobs.count))) de \(model.jobs.count)", "Compressing \(Int(model.progress * Double(model.jobs.count))) of \(model.jobs.count)")).fontWeight(.medium)
+                        Spacer()
+                        Text("\(Int(model.progress * 100)) %").monospacedDigit().foregroundStyle(.secondary)
+                    }
+                    ProgressView(value: model.progress).tint(model.kind.accent)
+                }
+                .padding(20)
+            }
+            Table(model.jobs, selection: $model.selectedJobIDs) {
+                TableColumn(t("Archivo", "File")) { job in
+                    HStack(spacing: 8) {
+                        Image(systemName: job.kind.icon).foregroundStyle(job.kind.accent)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(job.url.lastPathComponent).lineLimit(1)
+                            if case .failed(let e) = job.status {
+                                Text(e).font(.caption).foregroundStyle(.red).lineLimit(1)
+                            }
+                        }
+                    }
+                }
+                .width(min: 240, ideal: 340)
+
+                TableColumn(t("Original", "Original")) {
+                    Text(Format.bytes($0.originalBytes)).monospacedDigit()
+                }
+                .width(min: 90, ideal: 105)
+
+                TableColumn(t("Final", "Final")) {
+                    Text(Format.bytes($0.finalBytes)).monospacedDigit()
+                }
+                .width(min: 90, ideal: 105)
+
+                TableColumn(t("Ahorro", "Savings")) { job in
+                    Text(saving(job)).monospacedDigit().foregroundStyle(savingColor(job))
+                }
+                .width(min: 80, ideal: 95)
+
+                TableColumn(t("Estado", "Status")) { job in
+                    Label(statusLabel(job.status), systemImage: job.status.icon).foregroundStyle(statusColor(job.status))
+                }
+                .width(min: 120, ideal: 135)
+
+                TableColumn("") { job in
+                    if !model.isWorking {
+                        Button {
+                            model.remove(id: job.id)
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary.opacity(0.8))
+                        }
+                        .buttonStyle(.plain)
+                        .help(t("Eliminar de la lista", "Remove from list"))
+                    }
+                }
+                .width(min: 26, ideal: 30, max: 36)
+            }
+            .contextMenu(forSelectionType: Job.ID.self) { ids in
+                if !model.isWorking && !ids.isEmpty {
+                    Button(role: .destructive) {
+                        model.remove(ids: ids)
+                    } label: {
+                        Label(
+                            ids.count > 1 ? t("Eliminar seleccionados", "Remove selected") : t("Eliminar de la lista", "Remove from list"),
+                            systemImage: "trash"
+                        )
+                    }
+                }
+            }
+            .onDeleteCommand {
+                guard !model.isWorking, !model.selectedJobIDs.isEmpty else { return }
+                model.remove(ids: model.selectedJobIDs)
+            }
+        }
     }
     private var footer: some View {
         VStack(spacing: 16) {
@@ -50,7 +126,19 @@ struct ContentView: View {
                         .foregroundStyle(model.isPaused ? Color.orange : Color.secondary)
                 }
                 Spacer()
-                Button(t("Limpiar", "Clear")) { model.clear() }.disabled(model.isWorking || model.jobs.isEmpty)
+                if !model.selectedJobIDs.isEmpty && !model.isWorking {
+                    Button(
+                        model.selectedJobIDs.count > 1 ? t("Eliminar (\(model.selectedJobIDs.count))", "Remove (\(model.selectedJobIDs.count))") : t("Eliminar", "Remove"),
+                        systemImage: "trash"
+                    ) {
+                        model.remove(ids: model.selectedJobIDs)
+                    }
+                }
+                Button(t("Limpiar todo", "Clear all")) {
+                    model.clear()
+                }
+                .disabled(model.isWorking || model.jobs.isEmpty)
+
                 Button(t("Mostrar resultados", "Show results"), systemImage: "folder") { model.reveal() }.disabled(model.jobs.allSatisfy { $0.result == nil })
                 if model.isWorking {
                     Button(model.isPaused ? t("Reanudar", "Resume") : t("Pausa", "Pause"), systemImage: model.isPaused ? "play.fill" : "pause.fill") { model.togglePause() }.controlSize(.large)
