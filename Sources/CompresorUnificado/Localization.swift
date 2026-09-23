@@ -120,10 +120,30 @@ struct SettingsView: View {
                 Text(tr("Los originales nunca se sobrescriben. Si un nombre ya existe, se crea uno único.", "Originals are never overwritten. If a name already exists, a unique one is created.", language:language))
                     .font(.caption).foregroundStyle(.secondary)
             }
+            Section(tr("Información", "About", language:language)) {
+                HStack {
+                    Text(tr("Versión", "Version", language:language))
+                    Spacer()
+                    Text("1.2 (Apple Silicon)")
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text(tr("Desarrollador", "Developer", language:language))
+                    Spacer()
+                    Text("Infoprojectstone")
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Text("Copyright")
+                    Spacer()
+                    Text("© 2026 Infoprojectstone")
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
         .formStyle(.grouped)
         .padding(12)
-        .frame(width:540,height:460)
+        .frame(width:540,height:560)
         .navigationTitle(tr("Ajustes", "Settings", language:language))
         .onAppear {
             loadCustomFolderPath()
