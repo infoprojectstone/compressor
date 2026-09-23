@@ -22,6 +22,21 @@ struct ContentView: View {
             Text(t("COMPRIMIR","COMPRESS")).font(.caption2.weight(.bold)).foregroundStyle(.secondary).padding(.horizontal,12)
             ForEach(ContentKind.allCases) { item in Button { model.kind=item } label: { Label(kindTitle(item),systemImage:item.icon).frame(maxWidth:.infinity,alignment:.leading).padding(.horizontal,12).padding(.vertical,11).contentShape(RoundedRectangle(cornerRadius:10)).background(model.kind == item ? item.accent.opacity(0.16) : .clear,in:RoundedRectangle(cornerRadius:10)).foregroundStyle(model.kind == item ? item.accent : .primary) }.buttonStyle(.plain).contentShape(RoundedRectangle(cornerRadius:10)).disabled(model.isWorking) }
             Spacer()
+            Button {
+                openSettings()
+            } label: {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 28, height: 28)
+                    .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 7))
+                    .contentShape(RoundedRectangle(cornerRadius: 7))
+            }
+            .buttonStyle(SidebarGearButtonStyle())
+            .help(t("Ajustes", "Settings"))
+            .padding(.horizontal, 2)
+            .padding(.bottom, 2)
+
             VStack(alignment:.leading,spacing:6) { Label(t("Privado y local","Private and local"),systemImage:"lock.fill").font(.caption.weight(.semibold)); Text(t("Tus archivos nunca salen de tu Mac.","Your files never leave your Mac.")).font(.caption2).foregroundStyle(.secondary) }.padding(13).frame(maxWidth:.infinity,alignment:.leading).background(.quaternary.opacity(0.6),in:RoundedRectangle(cornerRadius:12))
         }.padding(18).background(.thinMaterial)
     }
@@ -222,7 +237,37 @@ struct ContentView: View {
     private func t(_ es:String,_ en:String) -> String { tr(es,en,language:language) }
     private func kindTitle(_ kind:ContentKind) -> String { switch kind { case .image:t("Imágenes","Images"); case .video:t("Vídeos","Videos"); case .pdf:"PDF" } }
     private func statusLabel(_ status:JobStatus) -> String { switch status { case .waiting:t("Pendiente","Waiting"); case .processing:t("Procesando…","Processing…"); case .done:t("Comprimido","Compressed"); case .skipped:t("Sin mejora","No improvement"); case .failed:t("Error","Error") } }
+    private func openSettings() {
+        NSApp.activate(ignoringOtherApps: true)
+        let s1 = Selector(("showSettingsWindow:"))
+        let s2 = Selector(("showPreferencesWindow:"))
+        if NSApp.sendAction(s1, to: nil, from: nil) { return }
+        if NSApp.sendAction(s2, to: nil, from: nil) { return }
+        if let menu = NSApp.mainMenu {
+            for item in menu.items {
+                if let submenu = item.submenu {
+                    for subitem in submenu.items {
+                        if subitem.action == s1 || subitem.action == s2 {
+                            if let target = subitem.target {
+                                _ = target.perform(subitem.action, with: subitem)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private func load(_ providers:[NSItemProvider]) { for p in providers { p.loadItem(forTypeIdentifier:UTType.fileURL.identifier,options:nil) { v,_ in let url=(v as? Data).flatMap { URL(dataRepresentation:$0,relativeTo:nil) } ?? (v as? URL); if let url { DispatchQueue.main.async { model.add([url], allowMixed: true) } } } } }
+}
+
+struct SidebarGearButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.6 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
+    }
 }
 
 struct AppMark: View {
