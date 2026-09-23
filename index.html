@@ -125,22 +125,66 @@
       filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.12)) drop-shadow(0 0 25px var(--accent-glow));
     }
     [data-theme="light"] .finder-section {
-      background: linear-gradient(180deg, rgba(241, 245, 249, 0.85) 0%, rgba(226, 232, 240, 0.95) 100%);
-      border-color: rgba(0, 0, 0, 0.08);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-color: rgba(37, 99, 235, 0.22);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05), 0 0 60px rgba(37, 99, 235, 0.05);
     }
-    [data-theme="light"] .finder-preview-card {
-      border-color: rgba(0, 0, 0, 0.08);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    [data-theme="light"] .finder-section::before {
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
     }
-    [data-theme="light"] .finder-context-menu {
-      border-color: rgba(0, 0, 0, 0.1);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    [data-theme="light"] .finder-badge {
+      background: rgba(37, 99, 235, 0.1);
+      border-color: rgba(37, 99, 235, 0.25);
+      color: #2563eb;
+    }
+    [data-theme="light"] .finder-pill {
+      background: #f1f5f9;
+      border-color: rgba(0, 0, 0, 0.07);
+      color: #475569;
+    }
+    [data-theme="light"] .step-item {
+      background: rgba(0, 0, 0, 0.015);
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="light"] .step-item:hover {
+      border-color: rgba(37, 99, 235, 0.3);
+      background: rgba(37, 99, 235, 0.03);
     }
     [data-theme="light"] .step-num {
       background: rgba(37, 99, 235, 0.1);
-      border-color: #2563eb;
+      border-color: rgba(37, 99, 235, 0.3);
+      color: #2563eb;
+    }
+    [data-theme="light"] .finder-preview-card {
+      background: #f1f5f9;
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="light"] .finder-window-mockup {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="light"] .finder-window-header {
+      background: #f8fafc;
+      border-color: rgba(0, 0, 0, 0.07);
+    }
+    [data-theme="light"] .file-row.selected {
+      background: rgba(37, 99, 235, 0.1);
       color: #1d4ed8;
+    }
+    [data-theme="light"] .file-row.selected .file-size {
+      color: #2563eb;
+    }
+    [data-theme="light"] .finder-context-menu {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    [data-theme="light"] .finder-callout {
+      color: #2563eb;
+      background: rgba(37, 99, 235, 0.06);
+      border-color: rgba(37, 99, 235, 0.15);
     }
     [data-theme="light"] .pill-purple { background: rgba(168, 85, 247, 0.12); color: #7e22ce; }
     [data-theme="light"] .pill-pink { background: rgba(236, 72, 153, 0.12); color: #be185d; }
@@ -785,41 +829,100 @@
     .stat-label { color: var(--text-dim); }
     .stat-val { font-weight: 700; color: #10b981; }
 
-    /* Finder Integration Section */
+    /* Finder Integration Section - Enhanced Weight */
     .finder-section {
-      background: linear-gradient(180deg, rgba(22, 24, 34, 0.6) 0%, rgba(13, 14, 20, 0.9) 100%);
-      border: 1px solid var(--border);
+      position: relative;
+      background: linear-gradient(180deg, rgba(26, 30, 46, 0.75) 0%, rgba(13, 15, 23, 0.95) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 90px rgba(37, 99, 235, 0.1);
       border-radius: var(--radius-lg);
-      padding: 50px 40px;
-      margin: 80px 0;
+      padding: 56px 44px;
+      margin: 64px 0 84px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 48px;
       align-items: center;
+      overflow: hidden;
     }
-    @media (max-width: 860px) {
-      .finder-section { grid-template-columns: 1fr; padding: 32px 24px; }
+    .finder-section::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .finder-content {
+      position: relative;
+      z-index: 1;
+    }
+    .finder-badge {
+      background: rgba(59, 130, 246, 0.14);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #60a5fa;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
     .finder-content h2 {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       margin-bottom: 16px;
       letter-spacing: -0.03em;
+      line-height: 1.18;
     }
     .finder-content p {
       color: var(--text-muted);
       font-size: 1.05rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .finder-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
       margin-bottom: 24px;
+    }
+    .finder-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .finder-pill svg {
+      color: #10b981;
     }
     .finder-steps {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 11px;
     }
     .step-item {
       display: flex;
       align-items: flex-start;
       gap: 14px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .step-item:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: rgba(59, 130, 246, 0.04);
     }
     .step-num {
       width: 28px;
@@ -834,48 +937,167 @@
       font-weight: 700;
       color: #60a5fa;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 1px;
     }
     .step-text {
       font-size: 0.95rem;
       color: var(--text-muted);
+      line-height: 1.5;
     }
     .finder-preview-card {
+      position: relative;
       background: var(--finder-card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      padding: 16px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+    .finder-window-mockup {
+      position: relative;
+      background: rgba(18, 20, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+    .finder-window-header {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+    .window-controls {
+      display: flex;
+      gap: 6px;
+    }
+    .control-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .control-dot.close { background: #ff5f56; }
+    .control-dot.minimize { background: #ffbd2e; }
+    .control-dot.maximize { background: #27c93f; }
+    .window-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .window-view-opts {
+      color: var(--text-dim);
+      display: flex;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+    .window-view-opts .active {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .finder-file-list {
+      padding: 8px 0 26px;
+      display: flex;
+      flex-direction: column;
+    }
+    .file-row {
+      display: flex;
+      align-items: center;
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      gap: 10px;
+    }
+    .file-row .file-icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .file-row .file-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    .file-row .file-size {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono, monospace);
+    }
+    .file-row.selected {
+      background: rgba(37, 99, 235, 0.22);
+      color: #93c5fd;
+    }
+    .file-row.selected .file-size {
+      color: #93c5fd;
     }
     .finder-context-menu {
+      position: absolute;
+      top: 46px;
+      right: 18px;
       background: var(--finder-menu-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 8px 0;
-      width: 250px;
-      margin: 0 auto;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
-      font-size: 0.85rem;
+      padding: 6px 0;
+      width: 255px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+      font-size: 0.82rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10;
     }
     .menu-item {
-      padding: 6px 16px;
+      padding: 5px 14px;
       color: var(--text);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 0.82rem;
     }
     .menu-item.highlight {
       background: #2563eb;
       color: #fff;
       font-weight: 600;
+      border-radius: 5px;
+      margin: 2px 5px;
+      padding: 6px 10px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+    }
+    .menu-badge {
+      font-size: 0.65rem;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 2px 6px;
       border-radius: 4px;
-      margin: 2px 4px;
-      padding: 6px 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .menu-shortcut, .menu-sub {
+      color: var(--text-dim);
+      font-size: 0.75rem;
     }
     .menu-sep {
       height: 1px;
       background: var(--border);
-      margin: 6px 0;
+      margin: 5px 0;
+    }
+    .finder-callout {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #60a5fa;
+      font-weight: 500;
+      padding: 9px 14px;
+      background: rgba(37, 99, 235, 0.08);
+      border-radius: 8px;
+      border: 1px solid rgba(37, 99, 235, 0.18);
     }
 
     /* Comparison Table */
@@ -993,7 +1215,14 @@
     @media (max-width: 860px) {
       .finder-section {
         grid-template-columns: 1fr;
-        padding: 30px 20px;
+        padding: 36px 24px;
+        gap: 32px;
+      }
+      .finder-context-menu {
+        position: static;
+        width: 100%;
+        margin-top: 14px;
+        box-shadow: none;
       }
     }
 
@@ -1130,8 +1359,15 @@
       .finder-section {
         padding: 24px 16px;
         border-radius: var(--radius-md);
-        margin: 44px 0;
-        gap: 24px;
+        margin: 40px 0;
+        gap: 22px;
+      }
+      .finder-pills {
+        gap: 6px;
+        margin-bottom: 18px;
+      }
+      .file-row .file-size {
+        display: none;
       }
       .finder-content h2 {
         font-size: 1.6rem;
@@ -1280,8 +1516,8 @@
       </a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#caracteristicas" data-i18n="nav_features">Características</a></li>
-        <li><a href="#formatos" data-i18n="nav_formats">Formatos</a></li>
         <li><a href="#finder" data-i18n="nav_finder">Finder</a></li>
+        <li><a href="#formatos" data-i18n="nav_formats">Formatos</a></li>
         <li><a href="#comparativa" data-i18n="nav_comparison">Comparativa</a></li>
         <li><a href="#faq" data-i18n="nav_faq">Preguntas</a></li>
       </ul>
@@ -1379,7 +1615,120 @@
     </div>
   </section>
 
-  <!-- Formats Section -->
+    <!-- Finder Integration -->
+  <section class="container" id="finder">
+    <div class="finder-section">
+      <div class="finder-content">
+        <div class="badge finder-badge">
+          <span class="badge-dot" style="background:#3b82f6; box-shadow:0 0 10px #3b82f6;"></span>
+          <span data-i18n="fnd_badge">Acción Rápida de Finder</span>
+        </div>
+        <h2 data-i18n="fnd_title">Comprime con un clic derecho sin abrir la app.</h2>
+        <p data-i18n="fnd_desc">
+          Integrado directamente en el menú contextual de macOS. Selecciona uno o cientos de archivos en Finder, haz clic derecho y compresiónalos al instante.
+        </p>
+
+        <div class="finder-pills">
+          <span class="finder-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="fnd_pill_nofriction">Sin abrir la app</span>
+          </span>
+          <span class="finder-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="fnd_pill_batch">Cientos de archivos a la vez</span>
+          </span>
+          <span class="finder-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-i18n="fnd_pill_safe">Originales intactos</span>
+          </span>
+        </div>
+
+        <div class="finder-steps">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text" data-i18n-html="fnd_step1">Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>"Instalar Acción Rápida"</em>.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text" data-i18n="fnd_step2">Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text" data-i18n-html="fnd_step3">Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finder-preview-card">
+        <!-- Mockup macOS Finder Window -->
+        <div class="finder-window-mockup">
+          <div class="finder-window-header">
+            <div class="window-controls">
+              <span class="control-dot close"></span>
+              <span class="control-dot minimize"></span>
+              <span class="control-dot maximize"></span>
+            </div>
+            <div class="window-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              <span data-i18n="fnd_win_title">Archivos de trabajo</span>
+            </div>
+            <div class="window-view-opts">
+              <span>⊞</span>
+              <span class="active">☰</span>
+            </div>
+          </div>
+
+          <!-- Finder File List -->
+          <div class="finder-file-list">
+            <div class="file-row selected">
+              <span class="file-icon">🖼️</span>
+              <span class="file-name">IMG_9482_4K.HEIC</span>
+              <span class="file-size">24.8 MB</span>
+            </div>
+            <div class="file-row selected">
+              <span class="file-icon">🎬</span>
+              <span class="file-name">Video_Keynote.mov</span>
+              <span class="file-size">342 MB</span>
+            </div>
+            <div class="file-row selected">
+              <span class="file-icon">📄</span>
+              <span class="file-name">Memoria_2026.pdf</span>
+              <span class="file-size">18.6 MB</span>
+            </div>
+            <div class="file-row">
+              <span class="file-icon">📁</span>
+              <span class="file-name">Backup_Antiguo</span>
+              <span class="file-size">--</span>
+            </div>
+          </div>
+
+          <!-- Floating Context Menu -->
+          <div class="finder-context-menu">
+            <div class="menu-item"><span data-i18n="ctx_open">Abrir</span><span class="menu-shortcut">↵</span></div>
+            <div class="menu-item"><span data-i18n="ctx_openwith">Abrir con…</span><span class="menu-sub">›</span></div>
+            <div class="menu-sep"></div>
+            <div class="menu-item"><span data-i18n="ctx_getinfo">Obtener información</span><span class="menu-shortcut">⌘I</span></div>
+            <div class="menu-item"><span data-i18n="ctx_rename">Renombrar</span></div>
+            <div class="menu-sep"></div>
+            <div class="menu-item highlight">
+              <span data-i18n="ctx_action">⚡ Comprimir con Compresor</span>
+              <span class="menu-badge" data-i18n="ctx_instant">Nativo</span>
+            </div>
+            <div class="menu-item"><span data-i18n="ctx_quickactions">Acciones rápidas ›</span></div>
+            <div class="menu-sep"></div>
+            <div class="menu-item"><span data-i18n="ctx_trash">Trasladar a la papelera</span><span class="menu-shortcut">⌫</span></div>
+          </div>
+        </div>
+
+        <div class="finder-callout">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span data-i18n="fnd_callout">Procesa en segundo plano sin esperas ni abrir ventanas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Formats Section -->
   <section class="container" id="formatos">
     <div class="section-title">
       <h2 data-i18n="fmt_sec_title">Tres potentes motores en una sola app</h2>
@@ -1458,52 +1807,7 @@
     </div>
   </section>
 
-  <!-- Finder Integration -->
-  <section class="container" id="finder">
-    <div class="finder-section">
-      <div class="finder-content">
-        <div class="badge" style="background:rgba(236,72,153,0.12); border-color:rgba(236,72,153,0.3); color:#f472b6;" data-i18n="fnd_badge">
-          Acción Rápida de Finder
-        </div>
-        <h2 data-i18n="fnd_title">Comprime con un clic derecho sin abrir la app.</h2>
-        <p data-i18n="fnd_desc">
-          Integrado directamente en el menú contextual de macOS. Selecciona uno o cientos de archivos en Finder, haz clic derecho y compresiónalos al instante.
-        </p>
-        <div class="finder-steps">
-          <div class="step-item">
-            <div class="step-num">1</div>
-            <div class="step-text" data-i18n-html="fnd_step1">Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>"Instalar Acción Rápida"</em>.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">2</div>
-            <div class="step-text" data-i18n="fnd_step2">Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">3</div>
-            <div class="step-text" data-i18n-html="fnd_step3">Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!</div>
-          </div>
-        </div>
-      </div>
-      <div class="finder-preview-card">
-        <div class="finder-context-menu">
-          <div class="menu-item"><span data-i18n="ctx_open">Abrir</span></div>
-          <div class="menu-item"><span data-i18n="ctx_openwith">Abrir con…</span></div>
-          <div class="menu-sep"></div>
-          <div class="menu-item"><span data-i18n="ctx_getinfo">Obtener información</span></div>
-          <div class="menu-item"><span data-i18n="ctx_rename">Renombrar</span></div>
-          <div class="menu-sep"></div>
-          <div class="menu-item highlight">
-            <span data-i18n="ctx_action">⚡ Comprimir con Compresor</span>
-          </div>
-          <div class="menu-item"><span data-i18n="ctx_quickactions">Acciones rápidas ›</span></div>
-          <div class="menu-sep"></div>
-          <div class="menu-item"><span data-i18n="ctx_trash">Trasladar a la papelera</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Comparison Section -->
+<!-- Comparison Section -->
   <section class="container" id="comparativa">
     <div class="comparison-section">
       <div class="section-title">
@@ -1759,9 +2063,15 @@
         fnd_badge: "Acción Rápida de Finder",
         fnd_title: "Comprime con un clic derecho sin abrir la app.",
         fnd_desc: "Integrado directamente en el menú contextual de macOS. Selecciona uno o cientos de archivos en Finder, haz clic derecho y compresiónalos al instante.",
+        fnd_pill_nofriction: "Sin abrir la app",
+        fnd_pill_batch: "Cientos de archivos a la vez",
+        fnd_pill_safe: "Originales intactos",
         fnd_step1: "Abre <strong>Ajustes</strong> en Compressor (Cmd + ,) y pulsa en <em>\"Instalar Acción Rápida\"</em>.",
         fnd_step2: "Haz clic derecho sobre cualquier imagen, vídeo o PDF en Finder.",
         fnd_step3: "Elige <strong>Acciones rápidas > Comprimir con Compresor</strong>. ¡Y listo!",
+        fnd_win_title: "Archivos de trabajo",
+        ctx_instant: "Nativo",
+        fnd_callout: "Procesa en segundo plano sin esperas ni abrir ventanas",
         ctx_open: "Abrir",
         ctx_openwith: "Abrir con…",
         ctx_getinfo: "Obtener información",
@@ -1878,9 +2188,15 @@
         fnd_badge: "Finder Quick Action",
         fnd_title: "Compress with a right-click without opening the app.",
         fnd_desc: "Integrated directly into macOS context menus. Select one or hundreds of files in Finder, right-click, and compress in an instant.",
+        fnd_pill_nofriction: "No need to open the app",
+        fnd_pill_batch: "Hundreds of files at once",
+        fnd_pill_safe: "Originals preserved",
         fnd_step1: "Open <strong>Settings</strong> in Compressor (Cmd + ,) and click <em>\"Install Quick Action\"</em>.",
         fnd_step2: "Right-click any image, video, or PDF in Finder.",
         fnd_step3: "Choose <strong>Quick Actions > Compress with Compressor</strong>. That\'s it!",
+        fnd_win_title: "Working Files",
+        ctx_instant: "Native",
+        fnd_callout: "Background processing with zero waiting or open windows",
         ctx_open: "Open",
         ctx_openwith: "Open with…",
         ctx_getinfo: "Get Info",
