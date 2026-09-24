@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — Compressor para macOS</title>
+  <meta name="description" content="Política de privacidad de Compressor para macOS. Procesamiento 100% local, sin telemetría y sin subida a servidores.">
+  <link rel="icon" type="image/svg+xml" href="assets/app_icon.svg">
+  <link rel="apple-touch-icon" href="assets/app_icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      try {
+        if (localStorage.getItem('compressor_theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --bg-card: rgba(22, 24, 34, 0.72);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.4);
+      --nav-bg: rgba(9, 10, 15, 0.85);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.15);
+      --nav-bg: rgba(255, 255, 255, 0.9);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; width: 100%; }
+    header.site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    .brand img { width: 34px; height: 34px; border-radius: 8px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .btn-back:hover { color: var(--text); border-color: var(--text-muted); }
+    .lang-btn, .theme-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .lang-btn:hover, .theme-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    main { flex: 1; padding: 60px 0 80px; }
+    .doc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; line-height: 1.2; }
+    .last-updated { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 36px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+    h2 { font-size: 1.35rem; font-weight: 700; margin: 32px 0 12px; letter-spacing: -0.02em; color: var(--text); }
+    p, ul { color: var(--text-muted); font-size: 1rem; margin-bottom: 16px; }
+    ul { padding-left: 24px; }
+    li { margin-bottom: 8px; }
+    strong { color: var(--text); }
+    .highlight-box {
+      background: rgba(37, 99, 235, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 18px 22px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 28px 0;
+    }
+    .highlight-box p { color: var(--text); margin-bottom: 0; font-weight: 500; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--text); }
+    @media (max-width: 640px) {
+      .doc-card { padding: 28px 20px; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/app_icon.png" alt="Compressor Icon">
+        <span>Compressor</span>
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn-back" data-i18n="nav_home">← Volver al inicio</a>
+        <button id="langToggle" class="lang-btn" aria-label="Cambiar idioma">
+          <span id="langLabel">EN</span>
+        </button>
+        <button id="themeToggle" class="theme-btn" aria-label="Cambiar tema">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="doc-card" id="docContent">
+      <!-- El contenido se inyecta dinámicamente según idioma -->
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>
+        <a href="index.html" data-i18n="ftr_home">Inicio</a> •
+        <a href="privacy.html" style="color:var(--text); font-weight:600;" data-i18n="ftr_priv">Privacidad</a> •
+        <a href="terms.html" data-i18n="ftr_terms">Términos de uso</a> •
+        <a href="https://github.com/infoprojectstone/compressor" target="_blank">GitHub</a>
+      </p>
+      <p style="margin-top:10px;">© 2026 Infoprojectstone · Compressor para macOS · Código abierto bajo licencia MIT</p>
+    </div>
+  </footer>
+
+  <script>
+    const contentData = {
+      es: {
+        badge: "🔒 Privacidad Absoluta Garantizada",
+        title: "Política de Privacidad",
+        updated: "Última actualización: 24 de septiembre de 2026",
+        html: `
+          <div class="highlight-box">
+            <p><strong>Principio fundamental:</strong> Compressor es una aplicación nativa que procesa el 100% de tus archivos directamente en tu Mac. Jamás recopilamos, transmitimos, inspeccionamos ni almacenamos tus datos en ningún servidor externo.</p>
+          </div>
+
+          <h2>1. Cero recopilación de archivos o contenidos</h2>
+          <p>Cuando utilizas Compressor para optimizar imágenes, vídeos o documentos PDF:</p>
+          <ul>
+            <li>Todos los algoritmos de compresión y transcodificación se ejecutan localmente en el procesador y el motor de medios de tu Mac (Apple Silicon).</li>
+            <li>Tus archivos originales y optimizados nunca salen de tu ordenador.</li>
+            <li>No se realiza ninguna petición de red para procesar, validar o enviar metadatos de tus archivos.</li>
+          </ul>
+
+          <h2>2. Sin telemetría ni rastreo</h2>
+          <p>Creemos firmemente en el derecho a la privacidad:</p>
+          <ul>
+            <li><strong>Sin analítica de uso:</strong> La app no incluye herramientas como Google Analytics, Firebase, Mixpanel ni similares.</li>
+            <li><strong>Sin informes de errores automáticos:</strong> No enviamos informes de fallos a la nube. Si experimentas un problema, tú decides si deseas reportarlo voluntariamente en nuestro repositorio público de GitHub.</li>
+            <li><strong>Sin cuentas ni registros:</strong> No necesitas crear una cuenta, iniciar sesión ni proporcionar un correo electrónico para usar Compressor.</li>
+          </ul>
+
+          <h2>3. Acceso al sistema de archivos local</h2>
+          <p>Compressor únicamente accede a las carpetas y archivos que tú seleccionas explícitamente mediante arrastrar y soltar, selector de archivos o mediante la Acción Rápida del Finder de macOS. Tus archivos originales jamás son sobreescritos ni modificados; los resultados se guardan de forma segura en subcarpetas dedicadas o en la ruta que tú elijas en Ajustes.</p>
+
+          <h2>4. Navegación en el sitio web</h2>
+          <p>El sitio web oficial (<code>infoprojectstone.github.io/compressor/</code>) y las descargas de binarios se alojan en la infraestructura de <strong>GitHub Pages</strong> y <strong>GitHub Releases</strong> (GitHub, Inc. / Microsoft Corp.). GitHub puede recopilar registros básicos de conexión (dirección IP, agente de usuario) necesarios para la transmisión técnica y seguridad de la red conforme a su propia política de privacidad.</p>
+
+          <h2>5. Contacto</h2>
+          <p>Si tienes preguntas o inquietudes acerca de nuestra política de privacidad o deseas auditar el código fuente, puedes inspeccionar el repositorio público o abrir una consulta en GitHub:</p>
+          <p><a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" style="color:var(--accent); font-weight:600;">github.com/infoprojectstone/compressor/issues</a></p>
+        `,
+        nav_home: "← Volver al inicio",
+        ftr_home: "Inicio",
+        ftr_priv: "Privacidad",
+        ftr_terms: "Términos de uso"
+      },
+      en: {
+        badge: "🔒 Absolute Local Privacy Guaranteed",
+        title: "Privacy Policy",
+        updated: "Last updated: September 24, 2026",
+        html: `
+          <div class="highlight-box">
+            <p><strong>Core Principle:</strong> Compressor is a native macOS application that processes 100% of your files locally on your Mac. We never collect, transmit, inspect, or store your personal files on any remote servers.</p>
+          </div>
+
+          <h2>1. Zero File or Content Collection</h2>
+          <p>When you use Compressor to optimize images, videos, or PDF documents:</p>
+          <ul>
+            <li>All compression and transcoding pipelines run exclusively on your Mac's Apple Silicon hardware media engines and CPU/GPU.</li>
+            <li>Your source and compressed files never leave your physical device.</li>
+            <li>No network requests are ever made to process, analyze, or upload file data or metadata.</li>
+          </ul>
+
+          <h2>2. Zero Telemetry & Tracking</h2>
+          <p>We believe private software should be truly private:</p>
+          <ul>
+            <li><strong>No Usage Analytics:</strong> No tracking SDKs (e.g. Google Analytics, Firebase, Mixpanel).</li>
+            <li><strong>No Silent Crash Reporting:</strong> The app does not broadcast automated crash reports to cloud endpoints. Bug reporting is entirely voluntary via our public GitHub Issues tracker.</li>
+            <li><strong>No Accounts or Logins:</strong> You don't need to register, log in, or provide an email address to use any feature of Compressor.</li>
+          </ul>
+
+          <h2>3. Local File System Access</h2>
+          <p>Compressor only accesses files and directories that you explicitly choose through drag-and-drop, standard file open dialogs, or via macOS Finder Quick Actions. Original files are never overwritten or mutated; optimized outputs are safely placed in dedicated subfolders or user-specified custom destinations.</p>
+
+          <h2>4. Website Hosting</h2>
+          <p>The official website (<code>infoprojectstone.github.io/compressor/</code>) and release downloads are hosted on <strong>GitHub Pages</strong> and <strong>GitHub Releases</strong> (GitHub, Inc. / Microsoft Corp.). GitHub may collect basic operational connection logs (such as IP addresses and browser user-agents) strictly for security and transmission integrity as outlined in the GitHub Privacy Statement.</p>
+
+          <h2>5. Contact & Source Code Audit</h2>
+          <p>If you have questions regarding this Privacy Policy or wish to audit the source code, please visit our public GitHub repository:</p>
+          <p><a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" style="color:var(--accent); font-weight:600;">github.com/infoprojectstone/compressor/issues</a></p>
+        `,
+        nav_home: "← Back to Home",
+        ftr_home: "Home",
+        ftr_priv: "Privacy Policy",
+        ftr_terms: "Terms of Service"
+      }
+    };
+
+    let currentLang = 'es';
+    try {
+      const savedLang = localStorage.getItem('compressor_lang');
+      if (savedLang === 'en' || (savedLang === null && !navigator.language.startsWith('es'))) {
+        currentLang = 'en';
+      }
+    } catch(e) {}
+
+    function renderContent() {
+      const data = contentData[currentLang];
+      document.documentElement.lang = currentLang;
+      document.title = (currentLang === 'es' ? 'Política de Privacidad' : 'Privacy Policy') + ' — Compressor';
+      document.getElementById('langLabel').textContent = currentLang === 'es' ? 'EN' : 'ES';
+      
+      const doc = document.getElementById('docContent');
+      doc.innerHTML = `
+        <div class="badge">${data.badge}</div>
+        <h1>${data.title}</h1>
+        <div class="last-updated">${data.updated}</div>
+        ${data.html}
+      `;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (data[key]) el.textContent = data[key];
+      });
+    }
+
+    document.getElementById('langToggle').addEventListener('click', () => {
+      currentLang = currentLang === 'es' ? 'en' : 'es';
+      try { localStorage.setItem('compressor_lang', currentLang); } catch(e) {}
+      renderContent();
+    });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        try { localStorage.setItem('compressor_theme', 'dark'); } catch(e) {}
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        try { localStorage.setItem('compressor_theme', 'light'); } catch(e) {}
+      }
+    });
+
+    renderContent();
+  </script>
+</body>
+</html>
