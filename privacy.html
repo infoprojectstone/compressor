@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Política de Privacidad — Compressor para macOS</title>
-  <meta name="description" content="Política de privacidad de Compressor para macOS. Procesamiento 100% local, sin telemetría y sin subida a servidores.">
+  <meta name="description" content="Privacidad de Compressor para macOS: procesamiento local de archivos, preferencias guardadas en el dispositivo y servicios externos del sitio web.">
   <link rel="icon" type="image/svg+xml" href="assets/app_icon.svg">
   <link rel="apple-touch-icon" href="assets/app_icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -193,46 +193,50 @@
         <a href="terms.html" data-i18n="ftr_terms">Términos de uso</a> •
         <a href="https://github.com/infoprojectstone/compressor" target="_blank">GitHub</a>
       </p>
-      <p style="margin-top:10px;">© 2026 Infoprojectstone · Compressor para macOS · Código abierto bajo licencia MIT</p>
+      <p style="margin-top:10px;">Compressor para macOS · Mantenido por Infoprojectstone · Código abierto bajo licencia MIT</p>
     </div>
   </footer>
 
   <script>
     const contentData = {
       es: {
-        badge: "🔒 Privacidad Absoluta Garantizada",
+        badge: "🔒 Procesamiento local",
         title: "Política de Privacidad",
         updated: "Última actualización: 24 de septiembre de 2026",
         html: `
           <div class="highlight-box">
-            <p><strong>Principio fundamental:</strong> Compressor es una aplicación nativa que procesa el 100% de tus archivos directamente en tu Mac. Jamás recopilamos, transmitimos, inspeccionamos ni almacenamos tus datos en ningún servidor externo.</p>
+            <p><strong>En resumen:</strong> La app procesa en tu Mac los archivos que eliges y no los carga a servidores del proyecto. La app no incorpora telemetría, analítica ni envío automático de informes de fallos. El sitio web sí carga fuentes de Google y está alojado en GitHub Pages; esos servicios pueden recibir datos técnicos de conexión cuando visitas la web.</p>
           </div>
 
-          <h2>1. Cero recopilación de archivos o contenidos</h2>
-          <p>Cuando utilizas Compressor para optimizar imágenes, vídeos o documentos PDF:</p>
+          <h2>1. Alcance y contacto</h2>
+          <p>Esta política describe la aplicación Compressor para macOS y el sitio web oficial del proyecto. El proyecto está mantenido por <strong>Infoprojectstone</strong>. Para consultas sobre la aplicación o esta política, puedes contactar mediante <a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" rel="noopener noreferrer" style="color:var(--accent); font-weight:600;">GitHub Issues</a>. Ese espacio es público: no publiques allí datos personales, documentos, archivos privados ni información confidencial.</p>
+
+          <h2>2. Archivos que procesas con la aplicación</h2>
+          <p>Cuando seleccionas archivos o carpetas, Compressor lee localmente los elementos compatibles y los datos técnicos necesarios para procesarlos, como su formato, tamaño y, en el caso de vídeos, duración. El procesamiento se realiza en el Mac mediante frameworks de Apple. La aplicación no carga esos archivos ni sus metadatos a servidores del proyecto.</p>
           <ul>
-            <li>Todos los algoritmos de compresión y transcodificación se ejecutan localmente en el procesador y el motor de medios de tu Mac (Apple Silicon).</li>
-            <li>Tus archivos originales y optimizados nunca salen de tu ordenador.</li>
-            <li>No se realiza ninguna petición de red para procesar, validar o enviar metadatos de tus archivos.</li>
+            <li>La selección puede hacerse mediante arrastrar y soltar, el selector de archivos o la Acción Rápida de Finder. Al elegir una carpeta, la app busca dentro de ella archivos compatibles.</li>
+            <li>Los archivos resultantes se guardan en la ubicación que elijas. La app procura conservar intactos los originales y crea nombres de salida únicos; revisa los resultados antes de borrar tus originales.</li>
+            <li>Los datos de la cola de trabajo se usan mientras está abierta la sesión de la aplicación. Los archivos de salida que guardes permanecen en tu Mac hasta que los elimines.</li>
           </ul>
 
-          <h2>2. Sin telemetría ni rastreo</h2>
-          <p>Creemos firmemente en el derecho a la privacidad:</p>
-          <ul>
-            <li><strong>Sin analítica de uso:</strong> La app no incluye herramientas como Google Analytics, Firebase, Mixpanel ni similares.</li>
-            <li><strong>Sin informes de errores automáticos:</strong> No enviamos informes de fallos a la nube. Si experimentas un problema, tú decides si deseas reportarlo voluntariamente en nuestro repositorio público de GitHub.</li>
-            <li><strong>Sin cuentas ni registros:</strong> No necesitas crear una cuenta, iniciar sesión ni proporcionar un correo electrónico para usar Compressor.</li>
-          </ul>
+          <h2>3. Preferencias guardadas en el Mac</h2>
+          <p>La app guarda localmente algunas preferencias en el almacenamiento de macOS, por ejemplo el idioma, la ubicación de salida elegida y un marcador de seguridad para la carpeta personalizada que selecciones. Se usan para recordar tus ajustes y permitir el acceso a esa carpeta. No se envían al proyecto.</p>
 
-          <h2>3. Acceso al sistema de archivos local</h2>
-          <p>Compressor únicamente accede a las carpetas y archivos que tú seleccionas explícitamente mediante arrastrar y soltar, selector de archivos o mediante la Acción Rápida del Finder de macOS. Tus archivos originales jamás son sobreescritos ni modificados; los resultados se guardan de forma segura en subcarpetas dedicadas o en la ruta que tú elijas en Ajustes.</p>
+          <h2>4. Telemetría e informes de fallos</h2>
+          <p>El código fuente revisado no contiene SDKs de analítica ni un mecanismo propio de telemetría o envío automático de informes de fallos. macOS puede ofrecer el envío de diagnósticos del sistema a Apple según los ajustes que hayas elegido en el dispositivo; esa función la controla Apple, no Compressor. Si envías voluntariamente un informe mediante GitHub, el contenido que publiques podrá ser visible para otras personas y se tratará conforme a las condiciones y la política de privacidad de GitHub.</p>
 
-          <h2>4. Navegación en el sitio web</h2>
-          <p>El sitio web oficial (<code>infoprojectstone.github.io/compressor/</code>) y las descargas de binarios se alojan en la infraestructura de <strong>GitHub Pages</strong> y <strong>GitHub Releases</strong> (GitHub, Inc. / Microsoft Corp.). GitHub puede recopilar registros básicos de conexión (dirección IP, agente de usuario) necesarios para la transmisión técnica y seguridad de la red conforme a su propia política de privacidad.</p>
+          <h2>5. Sitio web, fuentes y servicios externos</h2>
+          <p>El sitio y las descargas se sirven mediante GitHub Pages y GitHub Releases. Al abrir las páginas, el navegador también solicita hojas de estilo y archivos de fuentes a Google Fonts (<code>fonts.googleapis.com</code> y <code>fonts.gstatic.com</code>). Esas solicitudes pueden comunicar a Google datos técnicos de conexión, como la dirección IP y datos del navegador. GitHub puede tratar datos técnicos de acceso, como la dirección IP y el agente de usuario, conforme a sus propias prácticas y a la <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">Declaración de Privacidad de GitHub</a>. Google trata las solicitudes conforme a su <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>. El proyecto no controla los plazos de conservación ni los usos que esos proveedores hagan de los datos que reciban.</p>
+          <p>El sitio guarda las preferencias de idioma y tema en el almacenamiento local (<code>localStorage</code>) de tu navegador. El código del sitio usa esas preferencias para recordar cómo mostrar las páginas. Puedes borrarlas desde la configuración de almacenamiento de tu navegador. Los enlaces a GitHub, Ko-fi u otros servicios externos se rigen por las políticas de esos servicios cuando los visitas.</p>
 
-          <h2>5. Contacto</h2>
-          <p>Si tienes preguntas o inquietudes acerca de nuestra política de privacidad o deseas auditar el código fuente, puedes inspeccionar el repositorio público o abrir una consulta en GitHub:</p>
-          <p><a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" style="color:var(--accent); font-weight:600;">github.com/infoprojectstone/compressor/issues</a></p>
+          <h2>6. Conservación y control</h2>
+          <p>Los archivos procesados y los resultados permanecen en las ubicaciones de tu Mac hasta que tú los elimines. Las preferencias permanecen en el almacenamiento local de macOS mientras sigan guardadas allí. GitHub y Google tratan las solicitudes técnicas y los registros relacionados conforme a sus propias políticas; la aplicación Compressor no los recopila.</p>
+
+          <h2>7. Cambios en esta política</h2>
+          <p>Si cambian las funciones de la aplicación, el sitio o los servicios externos utilizados, actualizaremos esta página y su fecha. La versión publicada aquí es la vigente para el sitio.</p>
+
+          <h2>8. Información de privacidad y derechos</h2>
+          <p>Para los datos técnicos que tratan directamente GitHub o Google, consulta la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">Declaración de Privacidad de GitHub</a>, la <a href="https://policies.google.com/privacy?hl=es" target="_blank" rel="noopener noreferrer">Política de Privacidad de Google</a> y sus canales de privacidad. Para consultas sobre la aplicación, puedes escribir al proyecto mediante GitHub Issues. Los issues son públicos: no incluyas datos privados ni solicitudes que revelen información personal.</p>
         `,
         nav_home: "← Volver al inicio",
         ftr_home: "Inicio",
@@ -240,44 +244,48 @@
         ftr_terms: "Términos de uso"
       },
       en: {
-        badge: "🔒 Absolute Local Privacy Guaranteed",
+        badge: "🔒 Local processing",
         title: "Privacy Policy",
         updated: "Last updated: September 24, 2026",
         html: `
           <div class="highlight-box">
-            <p><strong>Core Principle:</strong> Compressor is a native macOS application that processes 100% of your files locally on your Mac. We never collect, transmit, inspect, or store your personal files on any remote servers.</p>
+            <p><strong>In brief:</strong> The app processes the files you choose on your Mac and does not upload them to project servers. The app does not include telemetry, analytics, or automatic crash reporting. The website is hosted on GitHub Pages and loads fonts from Google; those providers may receive technical connection data when you visit the site.</p>
           </div>
 
-          <h2>1. Zero File or Content Collection</h2>
-          <p>When you use Compressor to optimize images, videos, or PDF documents:</p>
+          <h2>1. Scope and contact</h2>
+          <p>This policy covers the Compressor macOS app and the project's official website. The project is maintained by <strong>Infoprojectstone</strong>. For questions about the app or this policy, contact the project through <a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" rel="noopener noreferrer" style="color:var(--accent); font-weight:600;">GitHub Issues</a>. Issues are public: do not post personal data, documents, private files, or confidential information there.</p>
+
+          <h2>2. Files processed by the app</h2>
+          <p>When you select files or folders, Compressor reads compatible items locally and uses the technical information needed to process them, such as file format, size, and video duration. Processing runs on your Mac using Apple frameworks. The app does not upload those files or their metadata to project servers.</p>
           <ul>
-            <li>All compression and transcoding pipelines run exclusively on your Mac's Apple Silicon hardware media engines and CPU/GPU.</li>
-            <li>Your source and compressed files never leave your physical device.</li>
-            <li>No network requests are ever made to process, analyze, or upload file data or metadata.</li>
+            <li>You can select items by drag and drop, the file picker, or the Finder Quick Action. When you choose a folder, the app searches it for supported files.</li>
+            <li>Output files are saved to the location you choose. The app is designed to leave originals intact and create unique output names; review the results before deleting any originals.</li>
+            <li>Queue data is used while the app session is open. Output files you save remain on your Mac until you delete them.</li>
           </ul>
 
-          <h2>2. Zero Telemetry & Tracking</h2>
-          <p>We believe private software should be truly private:</p>
-          <ul>
-            <li><strong>No Usage Analytics:</strong> No tracking SDKs (e.g. Google Analytics, Firebase, Mixpanel).</li>
-            <li><strong>No Silent Crash Reporting:</strong> The app does not broadcast automated crash reports to cloud endpoints. Bug reporting is entirely voluntary via our public GitHub Issues tracker.</li>
-            <li><strong>No Accounts or Logins:</strong> You don't need to register, log in, or provide an email address to use any feature of Compressor.</li>
-          </ul>
+          <h2>3. Preferences stored on your Mac</h2>
+          <p>The app stores some preferences locally in macOS storage, such as your language, selected output location, and a security-scoped bookmark for a custom folder you choose. These settings are used to remember your choices and access that folder. They are not sent to the project.</p>
 
-          <h2>3. Local File System Access</h2>
-          <p>Compressor only accesses files and directories that you explicitly choose through drag-and-drop, standard file open dialogs, or via macOS Finder Quick Actions. Original files are never overwritten or mutated; optimized outputs are safely placed in dedicated subfolders or user-specified custom destinations.</p>
+          <h2>4. Telemetry and crash reports</h2>
+          <p>The source code reviewed contains no analytics SDK or app-run telemetry or automatic crash-reporting mechanism. macOS may offer to send system diagnostics to Apple depending on the settings you chose on your device; Apple controls that feature, not Compressor. If you voluntarily submit a report through GitHub, what you post may be visible to others and is handled under GitHub's terms and privacy policy.</p>
 
-          <h2>4. Website Hosting</h2>
-          <p>The official website (<code>infoprojectstone.github.io/compressor/</code>) and release downloads are hosted on <strong>GitHub Pages</strong> and <strong>GitHub Releases</strong> (GitHub, Inc. / Microsoft Corp.). GitHub may collect basic operational connection logs (such as IP addresses and browser user-agents) strictly for security and transmission integrity as outlined in the GitHub Privacy Statement.</p>
+          <h2>5. Website, fonts, and external services</h2>
+          <p>The website and downloads are served through GitHub Pages and GitHub Releases. When you open the pages, your browser also requests stylesheets and font files from Google Fonts (<code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>). Those requests may disclose technical connection data to Google, such as your IP address and browser information. GitHub may process technical access data, such as IP addresses and user agents, under its own practices and policies. The project does not control how long those providers retain data or how they use data they receive.</p>
+          <p>The site stores language and theme preferences in your browser's local storage (<code>localStorage</code>). The site code uses these preferences to remember how to display the pages. You can clear them in your browser's storage settings. Links to GitHub, Ko-fi, or other external services are governed by those services' policies when you visit them.</p>
 
-          <h2>5. Contact & Source Code Audit</h2>
-          <p>If you have questions regarding this Privacy Policy or wish to audit the source code, please visit our public GitHub repository:</p>
-          <p><a href="https://github.com/infoprojectstone/compressor/issues" target="_blank" style="color:var(--accent); font-weight:600;">github.com/infoprojectstone/compressor/issues</a></p>
+          <h2>6. Retention and control</h2>
+          <p>Processed files and outputs remain in the locations on your Mac until you delete them. Preferences remain in macOS local storage while they are stored there. GitHub and Google handle technical requests and any related records under their own policies; Compressor does not collect those records through the app.</p>
+
+          <h2>7. Changes to this policy</h2>
+          <p>If the app, website, or external services change, we will update this page and its date. The version published here is the current version for the website.</p>
+
+          <h2>8. Privacy information and rights</h2>
+          <p>For technical data processed directly by GitHub or Google, consult the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>, the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>, and their privacy channels. For questions about the app or information you posted in the repository, contact the project through GitHub; do not include private data in a public issue. The maintainer's published identity and contact details are the ones listed above.</p>
         `,
         nav_home: "← Back to Home",
         ftr_home: "Home",
         ftr_priv: "Privacy Policy",
-        ftr_terms: "Terms of Service"
+        ftr_terms: "Terms of Use"
       }
     };
 
